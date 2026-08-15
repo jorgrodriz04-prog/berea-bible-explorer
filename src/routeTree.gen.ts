@@ -13,8 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
 import { Route as EstudiosIndexRouteImport } from './routes/estudios.index'
+import { Route as EstudiosSlugRouteImport } from './routes/estudios.$slug'
 import { Route as BibliaBookIdIndexRouteImport } from './routes/biblia.$bookId.index'
 import { Route as BibliaBookIdChapterRouteImport } from './routes/biblia.$bookId.$chapter'
+import { Route as TemaKindIdRouteImport } from './routes/tema.$kind.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +38,11 @@ const EstudiosIndexRoute = EstudiosIndexRouteImport.update({
   path: '/estudios/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EstudiosSlugRoute = EstudiosSlugRouteImport.update({
+  id: '/estudios/$slug',
+  path: '/estudios/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BibliaBookIdIndexRoute = BibliaBookIdIndexRouteImport.update({
   id: '/biblia/$bookId/',
   path: '/biblia/$bookId/',
@@ -46,30 +53,41 @@ const BibliaBookIdChapterRoute = BibliaBookIdChapterRouteImport.update({
   path: '/biblia/$bookId/$chapter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemaKindIdRoute = TemaKindIdRouteImport.update({
+  id: '/tema/$kind/$id',
+  path: '/tema/$kind/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/estudios/$slug': typeof EstudiosSlugRoute
   '/biblia/': typeof BibliaIndexRoute
   '/estudios/': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/tema/$kind/$id': typeof TemaKindIdRoute
   '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/estudios/$slug': typeof EstudiosSlugRoute
   '/biblia': typeof BibliaIndexRoute
   '/estudios': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/tema/$kind/$id': typeof TemaKindIdRoute
   '/biblia/$bookId': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/estudios/$slug': typeof EstudiosSlugRoute
   '/biblia/': typeof BibliaIndexRoute
   '/estudios/': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/tema/$kind/$id': typeof TemaKindIdRoute
   '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -77,34 +95,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/buscar'
+    | '/estudios/$slug'
     | '/biblia/'
     | '/estudios/'
     | '/biblia/$bookId/$chapter'
+    | '/tema/$kind/$id'
     | '/biblia/$bookId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/buscar'
+    | '/estudios/$slug'
     | '/biblia'
     | '/estudios'
     | '/biblia/$bookId/$chapter'
+    | '/tema/$kind/$id'
     | '/biblia/$bookId'
   id:
     | '__root__'
     | '/'
     | '/buscar'
+    | '/estudios/$slug'
     | '/biblia/'
     | '/estudios/'
     | '/biblia/$bookId/$chapter'
+    | '/tema/$kind/$id'
     | '/biblia/$bookId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuscarRoute: typeof BuscarRoute
+  EstudiosSlugRoute: typeof EstudiosSlugRoute
   BibliaIndexRoute: typeof BibliaIndexRoute
   EstudiosIndexRoute: typeof EstudiosIndexRoute
   BibliaBookIdChapterRoute: typeof BibliaBookIdChapterRoute
+  TemaKindIdRoute: typeof TemaKindIdRoute
   BibliaBookIdIndexRoute: typeof BibliaBookIdIndexRoute
 }
 
@@ -138,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstudiosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/estudios/$slug': {
+      id: '/estudios/$slug'
+      path: '/estudios/$slug'
+      fullPath: '/estudios/$slug'
+      preLoaderRoute: typeof EstudiosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/biblia/$bookId/': {
       id: '/biblia/$bookId/'
       path: '/biblia/$bookId'
@@ -152,15 +185,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibliaBookIdChapterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tema/$kind/$id': {
+      id: '/tema/$kind/$id'
+      path: '/tema/$kind/$id'
+      fullPath: '/tema/$kind/$id'
+      preLoaderRoute: typeof TemaKindIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuscarRoute: BuscarRoute,
+  EstudiosSlugRoute: EstudiosSlugRoute,
   BibliaIndexRoute: BibliaIndexRoute,
   EstudiosIndexRoute: EstudiosIndexRoute,
   BibliaBookIdChapterRoute: BibliaBookIdChapterRoute,
+  TemaKindIdRoute: TemaKindIdRoute,
   BibliaBookIdIndexRoute: BibliaBookIdIndexRoute,
 }
 export const routeTree = rootRouteImport
