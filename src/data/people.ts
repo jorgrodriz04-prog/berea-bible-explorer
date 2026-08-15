@@ -1,0 +1,19 @@
+import type { Person } from "./types";
+
+export const people: Person[] = [
+  { id: "adan", name: "Adán", aliases: ["adam", "primer hombre"], role: "Primer hombre creado", summary: "Formado del polvo por Dios, puesto en el huerto de Edén y padre de la humanidad. Su desobediencia introdujo el pecado en el mundo.", refs: ["Génesis 1:27", "Génesis 3:20", "Romanos 5:12"], places: ["eden"] },
+  { id: "eva", name: "Eva", aliases: ["eve", "madre de todos los vivientes"], role: "Primera mujer", summary: "Llamada madre de todos los vivientes. Engañada por la serpiente, participó en la primera transgresión; en Génesis 3:15 aparece la primera promesa de redención.", refs: ["Génesis 2:22", "Génesis 3:6", "Génesis 3:20"], places: ["eden"] },
+  { id: "noe", name: "Noé", aliases: ["noah"], role: "Constructor del arca", summary: "Halló gracia ante Dios en una generación corrupta; por la fe construyó el arca y a través de él Dios preservó la humanidad.", refs: ["Génesis 6:8", "Génesis 9:11", "Hebreos 11:7"] },
+  { id: "abraham", name: "Abraham", aliases: ["abram", "padre de la fe"], role: "Padre del pueblo escogido", summary: "Llamado de Ur, recibió la promesa del pacto: descendencia, tierra y bendición para todas las naciones. Modelo de justificación por la fe.", refs: ["Génesis 12:1-3", "Génesis 15:6", "Romanos 4:3"] },
+  { id: "moises", name: "Moisés", aliases: ["moses"], role: "Libertador y legislador", summary: "Usado por Dios para liberar a Israel de Egipto, mediador del pacto en el Sinaí y autor del Pentateuco.", refs: ["Éxodo 3:10", "Éxodo 20:1", "Deuteronomio 34:10"] },
+  { id: "josue", name: "Josué", aliases: ["joshua"], role: "Sucesor de Moisés", summary: "Condujo a Israel a la tierra prometida; la caída de Jericó marcó el inicio de la conquista.", refs: ["Josué 1:9", "Josué 6:20"], places: ["jerico"] },
+  { id: "david", name: "David", aliases: ["rey david"], role: "Rey de Israel, salmista", summary: "Pastor ungido rey, hombre según el corazón de Dios; autor de muchos salmos y receptor de la promesa del trono eterno.", refs: ["1 Samuel 16:13", "Salmos 23:1", "2 Samuel 7:16"] },
+  { id: "judah", name: "Judá", aliases: ["juda", "judas hijo de jacob", "tribu de juda"], role: "Hijo de Jacob y tribu real", summary: "Cuarto hijo de Jacob; de su tribu vendría el cetro real y, según la promesa, el Mesías: el León de la tribu de Judá.", refs: ["Génesis 49:10", "Mateo 1:2", "Apocalipsis 5:5"] },
+  { id: "job-persona", name: "Job", aliases: [], role: "Varón perfecto y recto", summary: "Sufrió pérdidas extremas sin maldecir a Dios. Su libro trata el sufrimiento del justo y la soberanía divina, incluido el discurso sobre el leviatán.", refs: ["Job 1:1", "Job 41:1", "Santiago 5:11"] },
+  { id: "maria", name: "María", aliases: ["maria madre de jesus"], role: "Madre de Jesús", summary: "Joven de Nazaret escogida para dar a luz al Mesías por obra del Espíritu Santo.", refs: ["Lucas 1:31", "Lucas 2:7"] },
+  { id: "jesus", name: "Jesús", aliases: ["cristo", "jesucristo", "mesias", "cordero de dios"], role: "Hijo de Dios, Salvador", summary: "El Verbo hecho carne, cumplimiento de la ley y los profetas; murió y resucitó para la salvación de todo el que cree.", refs: ["Juan 1:14", "Juan 3:16", "Isaías 53:5"] },
+  { id: "pedro", name: "Pedro", aliases: ["simon pedro", "cefas"], role: "Apóstol", summary: "Pescador de Galilea llamado por Jesús; negó al Señor y fue restaurado, predicando en Pentecostés.", refs: ["Mateo 16:16", "Hechos 2:14"] },
+  { id: "pablo", name: "Pablo", aliases: ["saulo", "saulo de tarso", "apostol pablo"], role: "Apóstol a los gentiles", summary: "Perseguidor convertido en el camino a Damasco; escribió gran parte del Nuevo Testamento y predicó en Berea, donde escudriñaban las Escrituras.", refs: ["Hechos 9:15", "Hechos 17:10", "Romanos 8:38"], places: ["berea"] },
+];
+
+export const getPerson = (id: string) => people.find((p) => p.id === id);
