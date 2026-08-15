@@ -13,7 +13,7 @@ export interface SearchResult {
   id: string;
   type: ResultType;
   title: string;
-  subtitle?: string;
+  subtitle?: string | undefined;
   body: string;
   path: string;
   score: number;

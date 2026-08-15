@@ -13,7 +13,7 @@ export function AppLink({
   ...rest
 }: { href: string; children: ReactNode } & Omit<LinkProps, "to" | "params" | "children">) {
   return (
-    <Link to={href as LinkProps["to"]} {...rest}>
+    <Link to={href as "/"} {...rest}>
       {children}
     </Link>
   );

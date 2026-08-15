@@ -20,14 +20,14 @@ export function editDistance(a: string, b: string): number {
     const row = [i];
     for (let j = 1; j <= b.length; j++) {
       row[j] = Math.min(
-        prev[j] + 1,
-        row[j - 1] + 1,
-        prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+        (prev[j] ?? 0) + 1,
+        (row[j - 1] ?? 0) + 1,
+        (prev[j - 1] ?? 0) + (a[i - 1] === b[j - 1] ? 0 : 1),
       );
     }
     prev = row;
   }
-  return prev[b.length];
+  return prev[b.length] ?? 0;
 }
 
 const tolerance = (len: number) => (len <= 4 ? 1 : len <= 7 ? 2 : 3);

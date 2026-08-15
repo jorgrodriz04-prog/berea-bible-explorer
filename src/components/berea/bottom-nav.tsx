@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { AppLink } from "./app-link";
 import { BookOpen, Heart, Home, Search, Settings, GraduationCap } from "lucide-react";
 
 const items = [
@@ -8,7 +8,7 @@ const items = [
   { to: "/estudios", label: "Estudios", icon: GraduationCap },
   { to: "/favoritos", label: "Favoritos", icon: Heart },
   { to: "/ajustes", label: "Ajustes", icon: Settings },
-] as const;
+]  as { to: string; label: string; icon: typeof Home }[];
 
 export function BottomNav() {
   return (
@@ -16,14 +16,14 @@ export function BottomNav() {
       <ul className="mx-auto grid max-w-3xl grid-cols-6 px-1 pt-1.5">
         {items.map(({ to, label, icon: Icon }) => (
           <li key={to}>
-            <Link
-              to={to}
+            <AppLink
+              href={to}
               activeOptions={{ exact: to === "/" }}
               className="no-tap-highlight group flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl px-1 text-muted-foreground transition-colors data-[status=active]:text-primary"
             >
               <Icon className="size-5 shrink-0" strokeWidth={1.9} />
               <span className="text-[10px] font-semibold tracking-tight">{label}</span>
-            </Link>
+            </AppLink>
           </li>
         ))}
       </ul>
