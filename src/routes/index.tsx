@@ -50,6 +50,7 @@ function Home() {
         </p>
         <Link
           to="/buscar"
+          search={{ q: "", tipo: "todo" }}
           className="no-tap-highlight mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-card px-4 text-sm font-semibold text-card-foreground"
         >
           <Search className="size-4" />

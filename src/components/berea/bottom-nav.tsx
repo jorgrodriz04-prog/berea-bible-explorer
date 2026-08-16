@@ -4,7 +4,7 @@ import { BookOpen, Heart, Home, Search, Settings, GraduationCap } from "lucide-r
 const items = [
   { to: "/", label: "Inicio", icon: Home },
   { to: "/biblia", label: "Biblia", icon: BookOpen },
-  { to: "/buscar", label: "Buscar", icon: Search },
+  { to: "/buscar?q=&tipo=todo", label: "Buscar", icon: Search },
   { to: "/estudios", label: "Estudios", icon: GraduationCap },
   { to: "/favoritos", label: "Favoritos", icon: Heart },
   { to: "/ajustes", label: "Ajustes", icon: Settings },
