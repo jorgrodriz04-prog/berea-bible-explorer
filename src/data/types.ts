@@ -28,6 +28,14 @@ export interface Person {
   summary: string;
   refs: string[];
   places?: string[];
+  /** Textos principales donde aparece el personaje. */
+  keyTexts?: string[];
+  people?: string[];
+  events?: string[];
+  topics?: string[];
+  terms?: string[];
+  customs?: string[];
+  sources?: string[];
 }
 
 export interface Place {
@@ -37,6 +45,13 @@ export interface Place {
   region: string;
   summary: string;
   refs: string[];
+  people?: string[];
+  events?: string[];
+  topics?: string[];
+  terms?: string[];
+  customs?: string[];
+  historicalContext?: string;
+  sources?: string[];
 }
 
 export interface BibleEvent {
@@ -46,6 +61,13 @@ export interface BibleEvent {
   period: string;
   summary: string;
   refs: string[];
+  people?: string[];
+  places?: string[];
+  topics?: string[];
+  terms?: string[];
+  customs?: string[];
+  historicalContext?: string;
+  sources?: string[];
 }
 
 export interface Topic {
@@ -56,6 +78,112 @@ export interface Topic {
   summary: string;
   refs: string[];
   studies?: string[];
+  people?: string[];
+  places?: string[];
+  events?: string[];
+  terms?: string[];
+  sources?: string[];
+}
+
+/** Tipo de fuente de una afirmación: distingue Biblia, contexto e interpretación. */
+export type SourceKind =
+  | "biblia"
+  | "contexto-historico"
+  | "contexto-cultural"
+  | "obra-de-referencia"
+  | "comentario"
+  | "estudio-berea";
+
+export interface Source {
+  id: string;
+  name: string;
+  kind: SourceKind;
+  description: string;
+  note?: string;
+}
+
+/** Término bíblico: palabra o concepto con significado propio en el texto. */
+export interface Term {
+  id: string;
+  name: string;
+  aliases: string[];
+  category: "palabra" | "doctrina" | "simbolo" | "institucion";
+  /** Definición apoyada directamente en el texto bíblico. */
+  biblical: string;
+  /** Información histórica o lingüística de trasfondo (no es mandato bíblico). */
+  background?: string;
+  /** Lecturas o interpretaciones posibles, marcadas como tales. */
+  interpretations?: string[];
+  refs: string[];
+  people?: string[];
+  places?: string[];
+  events?: string[];
+  topics?: string[];
+  terms?: string[];
+  sources?: string[];
+}
+
+/** Costumbre o contexto cultural, con las tres capas siempre separadas. */
+export interface Custom {
+  id: string;
+  name: string;
+  aliases: string[];
+  area:
+    | "fiestas"
+    | "culto"
+    | "familia"
+    | "matrimonio"
+    | "duelo"
+    | "agricultura"
+    | "economia"
+    | "medidas"
+    | "vestimenta"
+    | "instituciones";
+  summary: string;
+  /** 1. Lo que afirma directamente la Biblia. */
+  biblical: string;
+  /** 2. Lo que procede del contexto histórico/cultural. */
+  historical?: string;
+  /** 3. Lo que corresponde a una interpretación. */
+  interpretation?: string;
+  refs: string[];
+  people?: string[];
+  places?: string[];
+  events?: string[];
+  terms?: string[];
+  sources?: string[];
+}
+
+/** Ley o mandamiento del texto bíblico. */
+export interface Law {
+  id: string;
+  name: string;
+  aliases: string[];
+  category: "moral" | "ceremonial" | "civil" | "mandamiento-nuevo";
+  summary: string;
+  /** Texto o resumen literal del mandato. */
+  biblical: string;
+  /** Uso o cumplimiento en el Nuevo Testamento, cuando el texto lo indica. */
+  fulfillment?: string;
+  interpretation?: string;
+  refs: string[];
+  people?: string[];
+  topics?: string[];
+  terms?: string[];
+  customs?: string[];
+  sources?: string[];
+}
+
+/** Referencia cruzada entre pasajes. */
+export interface CrossReference {
+  /** Referencia de origen, ej. "Juan 3:16". */
+  ref: string;
+  /** Pasajes relacionados. */
+  related: string[];
+  reason: string;
+  topics?: string[];
+  terms?: string[];
+  sources?: string[];
 }
 
 export interface StudySection {
