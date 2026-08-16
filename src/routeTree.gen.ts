@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BuscarRouteImport } from './routes/buscar'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as AjustesIndexRouteImport } from './routes/ajustes.index'
+import { Route as AjustesInformacionRouteImport } from './routes/ajustes.informacion'
+import { Route as AjustesPrivacidadRouteImport } from './routes/ajustes.privacidad'
 import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
 import { Route as EstudiosIndexRouteImport } from './routes/estudios.index'
 import { Route as EstudiosSlugRouteImport } from './routes/estudios.$slug'
@@ -26,6 +30,26 @@ const IndexRoute = IndexRouteImport.update({
 const BuscarRoute = BuscarRouteImport.update({
   id: '/buscar',
   path: '/buscar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AjustesIndexRoute = AjustesIndexRouteImport.update({
+  id: '/ajustes/',
+  path: '/ajustes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AjustesInformacionRoute = AjustesInformacionRouteImport.update({
+  id: '/ajustes/informacion',
+  path: '/ajustes/informacion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AjustesPrivacidadRoute = AjustesPrivacidadRouteImport.update({
+  id: '/ajustes/privacidad',
+  path: '/ajustes/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BibliaIndexRoute = BibliaIndexRouteImport.update({
@@ -62,7 +86,11 @@ const TemaKindIdRoute = TemaKindIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/ajustes/informacion': typeof AjustesInformacionRoute
+  '/ajustes/privacidad': typeof AjustesPrivacidadRoute
   '/estudios/$slug': typeof EstudiosSlugRoute
+  '/ajustes/': typeof AjustesIndexRoute
   '/biblia/': typeof BibliaIndexRoute
   '/estudios/': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
@@ -72,7 +100,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/ajustes/informacion': typeof AjustesInformacionRoute
+  '/ajustes/privacidad': typeof AjustesPrivacidadRoute
   '/estudios/$slug': typeof EstudiosSlugRoute
+  '/ajustes': typeof AjustesIndexRoute
   '/biblia': typeof BibliaIndexRoute
   '/estudios': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
@@ -83,7 +115,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/buscar': typeof BuscarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/ajustes/informacion': typeof AjustesInformacionRoute
+  '/ajustes/privacidad': typeof AjustesPrivacidadRoute
   '/estudios/$slug': typeof EstudiosSlugRoute
+  '/ajustes/': typeof AjustesIndexRoute
   '/biblia/': typeof BibliaIndexRoute
   '/estudios/': typeof EstudiosIndexRoute
   '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
@@ -95,7 +131,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/buscar'
+    | '/favoritos'
+    | '/ajustes/informacion'
+    | '/ajustes/privacidad'
     | '/estudios/$slug'
+    | '/ajustes/'
     | '/biblia/'
     | '/estudios/'
     | '/biblia/$bookId/$chapter'
@@ -105,7 +145,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/buscar'
+    | '/favoritos'
+    | '/ajustes/informacion'
+    | '/ajustes/privacidad'
     | '/estudios/$slug'
+    | '/ajustes'
     | '/biblia'
     | '/estudios'
     | '/biblia/$bookId/$chapter'
@@ -115,7 +159,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/buscar'
+    | '/favoritos'
+    | '/ajustes/informacion'
+    | '/ajustes/privacidad'
     | '/estudios/$slug'
+    | '/ajustes/'
     | '/biblia/'
     | '/estudios/'
     | '/biblia/$bookId/$chapter'
@@ -126,7 +174,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuscarRoute: typeof BuscarRoute
+  FavoritosRoute: typeof FavoritosRoute
+  AjustesInformacionRoute: typeof AjustesInformacionRoute
+  AjustesPrivacidadRoute: typeof AjustesPrivacidadRoute
   EstudiosSlugRoute: typeof EstudiosSlugRoute
+  AjustesIndexRoute: typeof AjustesIndexRoute
   BibliaIndexRoute: typeof BibliaIndexRoute
   EstudiosIndexRoute: typeof EstudiosIndexRoute
   BibliaBookIdChapterRoute: typeof BibliaBookIdChapterRoute
@@ -148,6 +200,34 @@ declare module '@tanstack/react-router' {
       path: '/buscar'
       fullPath: '/buscar'
       preLoaderRoute: typeof BuscarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ajustes/': {
+      id: '/ajustes/'
+      path: '/ajustes'
+      fullPath: '/ajustes/'
+      preLoaderRoute: typeof AjustesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ajustes/informacion': {
+      id: '/ajustes/informacion'
+      path: '/ajustes/informacion'
+      fullPath: '/ajustes/informacion'
+      preLoaderRoute: typeof AjustesInformacionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ajustes/privacidad': {
+      id: '/ajustes/privacidad'
+      path: '/ajustes/privacidad'
+      fullPath: '/ajustes/privacidad'
+      preLoaderRoute: typeof AjustesPrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/biblia/': {
@@ -198,7 +278,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuscarRoute: BuscarRoute,
+  FavoritosRoute: FavoritosRoute,
+  AjustesInformacionRoute: AjustesInformacionRoute,
+  AjustesPrivacidadRoute: AjustesPrivacidadRoute,
   EstudiosSlugRoute: EstudiosSlugRoute,
+  AjustesIndexRoute: AjustesIndexRoute,
   BibliaIndexRoute: BibliaIndexRoute,
   EstudiosIndexRoute: EstudiosIndexRoute,
   BibliaBookIdChapterRoute: BibliaBookIdChapterRoute,

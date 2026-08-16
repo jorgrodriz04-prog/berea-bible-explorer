@@ -20,8 +20,10 @@ const filters: Array<ResultType | "todo"> = [
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: (input: Record<string, unknown>) => ({
-    q: typeof input.q === "string" ? input.q : "",
-    tipo: (filters as string[]).includes(String(input.tipo)) ? (input.tipo as ResultType | "todo") : "todo",
+    q: typeof input["q"] === "string" ? (input["q"] as string) : "",
+    tipo: (filters as string[]).includes(String(input["tipo"]))
+      ? (input["tipo"] as ResultType | "todo")
+      : ("todo" as ResultType | "todo"),
   }),
   head: () => ({
     meta: [

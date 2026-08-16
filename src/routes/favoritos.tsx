@@ -85,6 +85,7 @@ function FavoritosPage() {
           >
             <Link
               to="/buscar"
+              search={{ q: "", tipo: "todo" }}
               className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
             >
               Ir a Buscar

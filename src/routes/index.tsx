@@ -3,7 +3,6 @@ import { BookOpen, GraduationCap, Search, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { Panel, SectionTitle } from "@/components/berea/section";
-import { RefChipList } from "@/components/berea/ref-chip";
 import { studies } from "@/data/studies";
 import { topics } from "@/data/topics";
 import { getChapter } from "@/data/verses";
@@ -50,6 +49,7 @@ function Home() {
         </p>
         <Link
           to="/buscar"
+          search={{ q: "", tipo: "todo" }}
           className="no-tap-highlight mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-card px-4 text-sm font-semibold text-card-foreground"
         >
           <Search className="size-4" />
@@ -120,7 +120,6 @@ function Home() {
 
       <section className="mt-6">
         <SectionTitle>Temas para explorar</SectionTitle>
-        <RefChipList refs={[]} />
         <div className="flex flex-wrap gap-2">
           {topics.slice(0, 8).map((t) => (
             <AppLink
