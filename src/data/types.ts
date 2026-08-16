@@ -204,4 +204,13 @@ export interface Study {
   places: string[];
   crossRefs: string[];
   conclusion: string;
+  events?: string[];
+  terms?: string[];
+  customs?: string[];
+  laws?: string[];
+  categories?: string[];
+  /** Ids de src/data/sources. Nunca atribuir contenido a fuentes no listadas. */
+  sources?: string[];
+  /** Lecturas distintas de un mismo pasaje, presentadas como interpretación. */
+  interpretations?: { view: string; basis: string }[];
 }
