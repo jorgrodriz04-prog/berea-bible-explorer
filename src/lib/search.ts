@@ -5,9 +5,23 @@ import { places } from "@/data/places";
 import { events } from "@/data/events";
 import { topics } from "@/data/themes";
 import { studies } from "@/data/studies";
+import { terms } from "@/data/terms";
+import { customs } from "@/data/customs";
+import { laws } from "@/data/laws";
+import { parseRef } from "./refs";
 import { fuzzyScore, snippet } from "./text";
 
-export type ResultType = "versiculo" | "libro" | "personaje" | "lugar" | "acontecimiento" | "tema" | "estudio";
+export type ResultType =
+  | "versiculo"
+  | "libro"
+  | "personaje"
+  | "lugar"
+  | "acontecimiento"
+  | "tema"
+  | "termino"
+  | "costumbre"
+  | "ley"
+  | "estudio";
 
 export interface SearchResult {
   id: string;
@@ -123,12 +137,51 @@ export function buildIndex(): IndexEntry[] {
     });
   }
 
+  for (const t of terms) {
+    entries.push({
+      id: `termino:${t.id}`,
+      type: "termino",
+      title: t.name,
+      subtitle: t.category,
+      body: t.biblical,
+      path: `/tema/termino/${t.id}`,
+      haystacks: [t.name, ...t.aliases, t.category, t.biblical, t.background ?? "", ...t.refs],
+    });
+  }
+
+  for (const c of customs) {
+    entries.push({
+      id: `costumbre:${c.id}`,
+      type: "costumbre",
+      title: c.name,
+      subtitle: c.area,
+      body: c.summary,
+      path: `/tema/costumbre/${c.id}`,
+      haystacks: [c.name, ...c.aliases, c.area, c.summary, c.biblical, c.historical ?? "", ...c.refs],
+    });
+  }
+
+  for (const l of laws) {
+    entries.push({
+      id: `ley:${l.id}`,
+      type: "ley",
+      title: l.name,
+      subtitle: l.category,
+      body: l.summary,
+      path: `/tema/ley/${l.id}`,
+      haystacks: [l.name, ...l.aliases, l.summary, l.biblical, ...l.refs],
+    });
+  }
+
   cache = entries;
   return entries;
 }
 
 const weights: Record<ResultType, number> = {
   tema: 1.1,
+  termino: 1.09,
+  costumbre: 1.02,
+  ley: 1.02,
   estudio: 1.08,
   personaje: 1.06,
   lugar: 1.04,
@@ -163,6 +216,9 @@ export function search(query: string, type?: ResultType | "todo"): SearchResult[
 
 export const resultTypeLabel: Record<ResultType, string> = {
   versiculo: "Versículo",
+  termino: "Término",
+  costumbre: "Contexto",
+  ley: "Ley",
   libro: "Libro",
   personaje: "Personaje",
   lugar: "Lugar",
@@ -170,6 +226,48 @@ export const resultTypeLabel: Record<ResultType, string> = {
   tema: "Tema",
   estudio: "Estudio",
 };
+
+/** Agrupa los resultados por categoría conservando el orden de relevancia. */
+export interface SearchGroup {
+  type: ResultType;
+  label: string;
+  results: SearchResult[];
+}
+
+export const groupOrder: ResultType[] = [
+  "versiculo",
+  "libro",
+  "lugar",
+  "personaje",
+  "acontecimiento",
+  "tema",
+  "termino",
+  "ley",
+  "costumbre",
+  "estudio",
+];
+
+export function groupedSearch(query: string, type?: ResultType | "todo"): SearchGroup[] {
+  const results = search(query, type);
+  const groups: SearchGroup[] = [];
+  for (const t of groupOrder) {
+    const items = results.filter((r) => r.type === t);
+    if (items.length) groups.push({ type: t, label: resultTypeLabel[t], results: items });
+  }
+  return groups;
+}
+
+/** Detecta si la consulta es una referencia bíblica abrible, ej. «Juan 3:16». */
+export function refShortcut(query: string): { label: string; path: string } | undefined {
+  const q = query.trim();
+  if (!/\d/.test(q)) return undefined;
+  const parsed = parseRef(q);
+  if (!parsed.path || !parsed.bookName || !parsed.chapter) return undefined;
+  return {
+    label: `${parsed.bookName} ${parsed.chapter}${parsed.verse ? `:${parsed.verse}` : ""}`,
+    path: parsed.path,
+  };
+}
 
 export const suggestedQueries = [
   "fe",
@@ -181,4 +279,7 @@ export const suggestedQueries = [
   "Eva",
   "Leviatán",
   "Judá",
+  "reino de Dios",
+  "Mar Rojo",
+  "bodas judías",
 ];
