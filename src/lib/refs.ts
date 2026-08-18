@@ -1,4 +1,4 @@
-import { books, slugifyBook } from "@/data/books";
+import { books, slugifyBook } from "@/data/bible/books";
 
 export interface ParsedRef {
   raw: string;

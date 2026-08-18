@@ -7,7 +7,7 @@ import { RefChipList } from "@/components/berea/ref-chip";
 import { getStudy } from "@/data/studies";
 import { getPerson } from "@/data/people";
 import { getPlace } from "@/data/places";
-import { getTopic } from "@/data/topics";
+import { getTopic } from "@/data/themes";
 
 export const Route = createFileRoute("/estudios/$slug")({
   loader: ({ params }) => {

@@ -1,9 +1,9 @@
-import { books } from "@/data/books";
-import { chapters } from "@/data/verses";
+import { books } from "@/data/bible/books";
+import { chapters } from "@/data/bible/verses";
 import { people } from "@/data/people";
 import { places } from "@/data/places";
 import { events } from "@/data/events";
-import { topics } from "@/data/topics";
+import { topics } from "@/data/themes";
 import { studies } from "@/data/studies";
 import { fuzzyScore, snippet } from "./text";
 

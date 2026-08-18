@@ -3,8 +3,8 @@ import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { EmptyState } from "@/components/berea/section";
 import { FavoriteButton } from "@/components/berea/favorite-button";
-import { adjacentBooks, getBook } from "@/data/books";
-import { getChapter } from "@/data/verses";
+import { adjacentBooks, getBook } from "@/data/bible/books";
+import { getChapter } from "@/data/bible/verses";
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
   loader: ({ params }) => {

@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { studies } from "@/data/studies";
-import { topics } from "@/data/topics";
+import { topics } from "@/data/themes";
 
 export const Route = createFileRoute("/estudios/")({
   head: () => ({
