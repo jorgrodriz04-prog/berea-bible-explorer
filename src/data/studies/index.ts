@@ -162,7 +162,7 @@ export const studies: Study[] = [
     ],
     historicalContext:
       "Jericó era una plaza clave del valle del Jordán, con muros dobles y acceso al agua. Militarmente, un asedio prolongado era la única opción humana razonable.",
-    people: ["josue"],
+    people: ["josue", "rahab"],
     places: ["jerico"],
     crossRefs: ["2 Corintios 10:4", "1 Samuel 15:22"],
     events: ["caida-jerico"],
