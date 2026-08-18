@@ -4,8 +4,8 @@ import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { Panel, SectionTitle } from "@/components/berea/section";
 import { studies } from "@/data/studies";
-import { topics } from "@/data/topics";
-import { getChapter } from "@/data/verses";
+import { topics } from "@/data/themes";
+import { getChapter } from "@/data/bible/verses";
 
 export const Route = createFileRoute("/")({
   head: () => ({

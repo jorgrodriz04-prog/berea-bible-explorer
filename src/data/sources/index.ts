@@ -1,4 +1,4 @@
-import type { Source } from "./types";
+import type { Source } from "../types";
 
 /**
  * Fuentes declaradas de BEREA. Toda afirmación del cerebro de conocimiento debe

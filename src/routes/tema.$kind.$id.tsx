@@ -7,7 +7,7 @@ import { RefChipList } from "@/components/berea/ref-chip";
 import { getPerson } from "@/data/people";
 import { getPlace } from "@/data/places";
 import { getEvent } from "@/data/events";
-import { getTopic } from "@/data/topics";
+import { getTopic } from "@/data/themes";
 import { studies } from "@/data/studies";
 
 type Kind = "personaje" | "lugar" | "acontecimiento" | "tema";

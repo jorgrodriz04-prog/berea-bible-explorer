@@ -1,4 +1,4 @@
-import type { Person } from "./types";
+import type { Person } from "../types";
 
 /**
  * Personajes bíblicos. La información se apoya en los textos citados en `refs`

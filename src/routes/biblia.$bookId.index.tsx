@@ -2,8 +2,8 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { EmptyState } from "@/components/berea/section";
-import { adjacentBooks, getBook } from "@/data/books";
-import { availableChapters } from "@/data/verses";
+import { adjacentBooks, getBook } from "@/data/bible/books";
+import { availableChapters } from "@/data/bible/verses";
 
 export const Route = createFileRoute("/biblia/$bookId/")({
   loader: ({ params }) => {

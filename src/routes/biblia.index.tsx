@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
-import { booksByTestament } from "@/data/books";
+import { booksByTestament } from "@/data/bible/books";
 import { Input } from "@/components/ui/input";
 import { normalize } from "@/lib/text";
 

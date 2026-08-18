@@ -1,4 +1,4 @@
-import type { Custom } from "./types";
+import type { Custom } from "../types";
 
 /**
  * Costumbres y contexto cultural. Cada entrada separa siempre:

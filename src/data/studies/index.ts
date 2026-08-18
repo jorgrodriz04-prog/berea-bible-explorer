@@ -1,4 +1,4 @@
-import type { Study } from "./types";
+import type { Study } from "../types";
 
 /**
  * Estudios bíblicos. Para agregar un estudio nuevo basta con añadir un objeto
@@ -33,6 +33,10 @@ export const studies: Study[] = [
     people: ["abraham", "noe", "josue"],
     places: ["jerico"],
     crossRefs: ["Hebreos 11:30", "Santiago 2:17", "Gálatas 2:20"],
+    events: ["caida-jerico", "diluvio"],
+    terms: ["justicia", "pacto-termino"],
+    categories: ["fe", "doctrina"],
+    sources: ["biblia-rv", "estudio-berea"],
     conclusion:
       "Agradar a Dios no comienza con esfuerzo, sino con confianza: creer que Él existe y que recompensa a quienes le buscan. Esa confianza, luego, se traduce en una vida obediente.",
   },
@@ -54,6 +58,11 @@ export const studies: Study[] = [
     people: ["david", "jesus"],
     places: ["jerusalen"],
     crossRefs: ["Mateo 6:14", "1 Juan 1:9", "Lucas 15:20"],
+    terms: ["expiacion", "justicia"],
+    customs: ["dia-expiacion"],
+    laws: ["sacrificios"],
+    categories: ["perdon", "vida cristiana"],
+    sources: ["biblia-rv", "contexto-historico-general", "estudio-berea"],
     conclusion:
       "El perdón de Dios es completo y creativo: borra la culpa y forma un corazón nuevo capaz de perdonar a otros.",
   },
@@ -75,6 +84,11 @@ export const studies: Study[] = [
     people: ["abraham", "moises", "jesus"],
     places: ["sinai", "jerusalen"],
     crossRefs: ["Lucas 22:20", "Romanos 4:3", "Hebreos 9:15"],
+    events: ["exodo", "cautividad"],
+    terms: ["pacto-termino", "mesias"],
+    laws: ["diez-mandamientos"],
+    categories: ["pacto", "teologia biblica"],
+    sources: ["biblia-rv", "contexto-cultural-general", "estudio-berea"],
     conclusion:
       "La historia bíblica no es una serie de episodios aislados, sino el desarrollo de un pacto que culmina en Cristo y en un pueblo con la ley escrita en el corazón.",
   },
@@ -96,6 +110,10 @@ export const studies: Study[] = [
     people: ["jesus", "pablo"],
     places: ["jerusalen"],
     crossRefs: ["Tito 3:5", "Romanos 5:8", "Hechos 4:12"],
+    events: ["crucifixion"],
+    terms: ["evangelio", "expiacion", "justicia"],
+    categories: ["salvacion", "doctrina"],
+    sources: ["biblia-rv", "contexto-historico-general", "estudio-berea"],
     conclusion:
       "La gracia excluye el orgullo y produce gratitud: el creyente no trabaja para ser salvo, sino porque ha sido salvado.",
   },
@@ -117,6 +135,15 @@ export const studies: Study[] = [
     people: ["jesus"],
     places: ["jerusalen"],
     crossRefs: ["Lucas 12:35", "1 Tesalonicenses 5:6", "Apocalipsis 19:7"],
+    events: ["segunda-venida"],
+    terms: ["reino-de-dios"],
+    customs: ["bodas-judias"],
+    categories: ["vigilancia", "parabolas"],
+    sources: ["biblia-rv", "contexto-cultural-general", "estudio-berea"],
+    interpretations: [
+      { view: "El aceite representa la fe personal y viva del creyente.", basis: "Interpretación: el texto no identifica el aceite; se deduce del contraste entre prudentes e insensatas." },
+      { view: "El aceite representa la obra del Espíritu Santo en el creyente.", basis: "Interpretación: se apoya en el uso del aceite como símbolo del Espíritu en otros pasajes, no en Mateo 25." },
+    ],
     conclusion:
       "La vigilancia cristiana es una fe provista y constante, no un entusiasmo momentáneo.",
   },
@@ -135,9 +162,13 @@ export const studies: Study[] = [
     ],
     historicalContext:
       "Jericó era una plaza clave del valle del Jordán, con muros dobles y acceso al agua. Militarmente, un asedio prolongado era la única opción humana razonable.",
-    people: ["josue"],
+    people: ["josue", "rahab"],
     places: ["jerico"],
     crossRefs: ["2 Corintios 10:4", "1 Samuel 15:22"],
+    events: ["caida-jerico"],
+    terms: ["pacto-termino"],
+    categories: ["fe", "obediencia"],
+    sources: ["biblia-rv", "contexto-historico-general", "estudio-berea"],
     conclusion:
       "Dios suele pedir obediencia antes de mostrar resultados; los muros caen cuando el pueblo confía más en su palabra que en la evidencia.",
   },

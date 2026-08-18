@@ -1,4 +1,4 @@
-import type { CrossReference } from "./types";
+import type { CrossReference } from "../types";
 
 /**
  * Referencias cruzadas entre pasajes. Se declaran explícitamente para no

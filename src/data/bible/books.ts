@@ -1,4 +1,4 @@
-import type { BibleBook } from "./types";
+import type { BibleBook } from "../types";
 
 type Raw = [name: string, abbr: string, chapters: number, testament: "AT" | "NT", group: string];
 

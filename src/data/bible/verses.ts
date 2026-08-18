@@ -1,4 +1,4 @@
-import type { ChapterContent } from "./types";
+import type { ChapterContent } from "../types";
 
 /**
  * Contenido bíblico de muestra (Reina-Valera, dominio público).
@@ -170,6 +170,118 @@ export const chapters: ChapterContent[] = [
       { number: 1, text: "Vi un cielo nuevo y una tierra nueva; porque el primer cielo y la primera tierra pasaron, y el mar ya no existía más." },
       { number: 3, text: "Y oí una gran voz del cielo que decía: He aquí el tabernáculo de Dios con los hombres, y él morará con ellos; y ellos serán su pueblo, y Dios mismo estará con ellos como su Dios." },
       { number: 4, text: "Enjugará Dios toda lágrima de los ojos de ellos; y ya no habrá muerte, ni habrá más llanto, ni clamor, ni dolor; porque las primeras cosas pasaron." },
+    ],
+  },
+  {
+    bookId: "genesis",
+    chapter: 15,
+    verses: [
+      { number: 1, text: "Después de estas cosas vino la palabra de Jehová a Abram en visión, diciendo: No temas, Abram; yo soy tu escudo, y tu galardón será sobremanera grande." },
+      { number: 5, text: "Y lo llevó fuera, y le dijo: Mira ahora los cielos, y cuenta las estrellas, si las puedes contar. Y le dijo: Así será tu descendencia." },
+      { number: 6, text: "Y creyó a Jehová, y le fue contado por justicia." },
+      { number: 18, text: "En aquel día hizo Jehová un pacto con Abram, diciendo: A tu descendencia daré esta tierra." },
+    ],
+  },
+  {
+    bookId: "exodo",
+    chapter: 20,
+    verses: [
+      { number: 1, text: "Y habló Dios todas estas palabras, diciendo:" },
+      { number: 2, text: "Yo soy Jehová tu Dios, que te saqué de la tierra de Egipto, de casa de servidumbre." },
+      { number: 3, text: "No tendrás dioses ajenos delante de mí." },
+      { number: 8, text: "Acuérdate del día de reposo para santificarlo." },
+      { number: 12, text: "Honra a tu padre y a tu madre, para que tus días se alarguen en la tierra que Jehová tu Dios te da." },
+    ],
+  },
+  {
+    bookId: "levitico",
+    chapter: 19,
+    verses: [
+      { number: 2, text: "Habla a toda la congregación de los hijos de Israel, y diles: Santos seréis, porque santo soy yo Jehová vuestro Dios." },
+      { number: 9, text: "Cuando segéis la mies de vuestra tierra, no segaréis hasta el último rincón de ella, ni espigarás tu tierra segada." },
+      { number: 10, text: "Y no rebuscarás tu viña, ni recogerás las uvas caídas; para el pobre y para el extranjero lo dejarás." },
+      { number: 18, text: "No te vengarás, ni guardarás rencor a los hijos de tu pueblo, sino amarás a tu prójimo como a ti mismo. Yo Jehová." },
+    ],
+  },
+  {
+    bookId: "josue",
+    chapter: 2,
+    verses: [
+      { number: 1, text: "Josué hijo de Nun envió desde Sitim dos espías secretamente, diciéndoles: Andad, reconoced la tierra, y a Jericó. Y ellos fueron, y entraron en casa de una mujer ramera que se llamaba Rahab, y posaron allí." },
+      { number: 11, text: "Oyendo esto, ha desmayado nuestro corazón; porque Jehová vuestro Dios es Dios arriba en los cielos y abajo en la tierra." },
+    ],
+  },
+  {
+    bookId: "proverbios",
+    chapter: 1,
+    verses: [
+      { number: 7, text: "El principio de la sabiduría es el temor de Jehová; los insensatos desprecian la sabiduría y la enseñanza." },
+    ],
+  },
+  {
+    bookId: "isaias",
+    chapter: 6,
+    verses: [
+      { number: 3, text: "Y el uno al otro daba voces, diciendo: Santo, santo, santo, Jehová de los ejércitos; toda la tierra está llena de su gloria." },
+      { number: 8, text: "Después oí la voz del Señor, que decía: ¿A quién enviaré, y quién irá por nosotros? Entonces respondí yo: Heme aquí, envíame a mí." },
+    ],
+  },
+  {
+    bookId: "mateo",
+    chapter: 22,
+    verses: [
+      { number: 37, text: "Jesús le dijo: Amarás al Señor tu Dios con todo tu corazón, y con toda tu alma, y con toda tu mente." },
+      { number: 38, text: "Este es el primero y grande mandamiento." },
+      { number: 39, text: "Y el segundo es semejante: Amarás a tu prójimo como a ti mismo." },
+      { number: 40, text: "De estos dos mandamientos depende toda la ley y los profetas." },
+    ],
+  },
+  {
+    bookId: "juan",
+    chapter: 13,
+    verses: [
+      { number: 34, text: "Un mandamiento nuevo os doy: Que os améis unos a otros; como yo os he amado, que también os améis unos a otros." },
+      { number: 35, text: "En esto conocerán todos que sois mis discípulos, si tuviereis amor los unos con los otros." },
+    ],
+  },
+  {
+    bookId: "romanos",
+    chapter: 5,
+    verses: [
+      { number: 1, text: "Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo." },
+      { number: 8, text: "Mas Dios muestra su amor para con nosotros, en que siendo aún pecadores, Cristo murió por nosotros." },
+      { number: 12, text: "Por tanto, como el pecado entró en el mundo por un hombre, y por el pecado la muerte, así la muerte pasó a todos los hombres." },
+    ],
+  },
+  {
+    bookId: "1-juan",
+    chapter: 4,
+    verses: [
+      { number: 8, text: "El que no ama, no ha conocido a Dios; porque Dios es amor." },
+      { number: 9, text: "En esto se mostró el amor de Dios para con nosotros, en que Dios envió a su Hijo unigénito al mundo, para que vivamos por él." },
+      { number: 10, text: "En esto consiste el amor: no en que nosotros hayamos amado a Dios, sino en que él nos amó a nosotros, y envió a su Hijo en propiciación por nuestros pecados." },
+    ],
+  },
+  {
+    bookId: "hebreos",
+    chapter: 8,
+    verses: [
+      { number: 6, text: "Pero ahora tanto mejor ministerio es el suyo, cuanto es mediador de un mejor pacto, establecido sobre mejores promesas." },
+    ],
+  },
+  {
+    bookId: "1-corintios",
+    chapter: 15,
+    verses: [
+      { number: 3, text: "Porque primeramente os he enseñado lo que asimismo recibí: Que Cristo murió por nuestros pecados, conforme a las Escrituras;" },
+      { number: 4, text: "y que fue sepultado, y que resucitó al tercer día, conforme a las Escrituras;" },
+    ],
+  },
+  {
+    bookId: "lucas",
+    chapter: 22,
+    verses: [
+      { number: 20, text: "De igual manera, después que hubo cenado, tomó la copa, diciendo: Esta copa es el nuevo pacto en mi sangre, que por vosotros se derrama." },
     ],
   },
 ];

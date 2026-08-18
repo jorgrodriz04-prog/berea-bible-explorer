@@ -1,4 +1,4 @@
-import type { Law } from "./types";
+import type { Law } from "../types";
 
 /** Leyes y mandamientos citados con su texto y, cuando el NT lo indica, su cumplimiento. */
 export const laws: Law[] = [
