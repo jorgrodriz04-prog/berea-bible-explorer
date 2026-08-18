@@ -1,4 +1,4 @@
-import type { ChapterContent } from "./types";
+import type { ChapterContent } from "../types";
 
 /**
  * Contenido bíblico de muestra (Reina-Valera, dominio público).

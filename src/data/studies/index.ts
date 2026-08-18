@@ -1,4 +1,4 @@
-import type { Study } from "./types";
+import type { Study } from "../types";
 
 /**
  * Estudios bíblicos. Para agregar un estudio nuevo basta con añadir un objeto

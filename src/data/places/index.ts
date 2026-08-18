@@ -1,4 +1,4 @@
-import type { Place } from "./types";
+import type { Place } from "../types";
 
 export const places: Place[] = [
   { id: "eden", name: "Edén", aliases: ["huerto del eden", "paraiso"], region: "Mesopotamia", summary: "Huerto plantado por Dios donde vivieron Adán y Eva antes de la caída.", refs: ["Génesis 2:8", "Génesis 3:23"], people: ["adan", "eva"], events: ["creacion", "caida"], sources: ["biblia-rv"] },

@@ -1,4 +1,4 @@
-import type { Term } from "./types";
+import type { Term } from "../types";
 
 /**
  * Términos bíblicos. Cada término separa la definición apoyada en el texto

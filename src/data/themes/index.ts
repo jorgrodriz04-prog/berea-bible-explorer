@@ -1,4 +1,4 @@
-import type { Topic } from "./types";
+import type { Topic } from "../types";
 
 export const topics: Topic[] = [
   { id: "fe", name: "Fe", aliases: ["creer", "confianza"], kind: "doctrina", summary: "Certeza de lo que se espera y convicción de lo que no se ve; el medio por el cual el creyente recibe las promesas de Dios.", refs: ["Hebreos 11:1", "Hebreos 11:6", "Efesios 2:8"], studies: ["la-fe-que-agrada-a-dios"] , people: ["abraham", "noe", "josue", "rahab"], events: ["caida-jerico"], terms: ["justicia"], sources: ["biblia-rv"] },

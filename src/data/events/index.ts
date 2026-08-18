@@ -1,4 +1,4 @@
-import type { BibleEvent } from "./types";
+import type { BibleEvent } from "../types";
 
 export const events: BibleEvent[] = [
   { id: "creacion", name: "La creación", aliases: ["principio", "seis dias"], period: "Principio", summary: "Dios crea los cielos y la tierra por su palabra, culminando en el hombre a su imagen.", refs: ["Génesis 1:1-27", "Juan 1:3"], people: ["adan", "eva"], places: ["eden"], topics: ["fe"], sources: ["biblia-rv"] },
