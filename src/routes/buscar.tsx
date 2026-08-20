@@ -5,7 +5,15 @@ import { AppShell } from "@/components/berea/app-shell";
 import { EmptyState } from "@/components/berea/section";
 import { ResultCard } from "@/components/berea/result-card";
 import { Input } from "@/components/ui/input";
-import { search, suggestedQueries, resultTypeLabel, type ResultType } from "@/lib/search";
+import { AppLink } from "@/components/berea/app-link";
+import {
+  search,
+  groupedSearch,
+  refShortcut,
+  suggestedQueries,
+  resultTypeLabel,
+  type ResultType,
+} from "@/lib/search";
 
 const filters: Array<ResultType | "todo"> = [
   "todo",
@@ -14,6 +22,9 @@ const filters: Array<ResultType | "todo"> = [
   "personaje",
   "lugar",
   "acontecimiento",
+  "termino",
+  "ley",
+  "costumbre",
   "estudio",
   "libro",
 ];
@@ -59,6 +70,8 @@ function BuscarPage() {
   }, [term, q, navigate]);
 
   const results = useMemo(() => search(q, tipo), [q, tipo]);
+  const groups = useMemo(() => groupedSearch(q, tipo), [q, tipo]);
+  const shortcut = useMemo(() => refShortcut(q), [q]);
 
   const counts = useMemo(() => {
     const all = search(q, "todo");
@@ -141,16 +154,36 @@ function BuscarPage() {
           </p>
         </section>
       ) : results.length ? (
-        <div className="mt-5 space-y-3">
-          {results.map((r) => (
-            <ResultCard key={r.id} result={r} />
+        <div className="mt-5 space-y-6">
+          {shortcut ? (
+            <AppLink
+              href={shortcut.path}
+              className="no-tap-highlight block rounded-2xl border border-primary/40 bg-primary/5 p-4"
+            >
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">
+                Abrir en el lector
+              </p>
+              <p className="mt-1 font-display text-base font-semibold text-foreground">{shortcut.label}</p>
+            </AppLink>
+          ) : null}
+          {groups.map((g) => (
+            <section key={g.type}>
+              <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                {g.label} · {g.results.length}
+              </h2>
+              <div className="space-y-3">
+                {g.results.map((r) => (
+                  <ResultCard key={r.id} result={r} />
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       ) : (
         <div className="mt-6">
           <EmptyState
             title="Sin resultados"
-            description="Intenta con otra palabra, un nombre propio o un tema como «pacto» o «salvación»."
+            description="No hay información suficiente en BEREA para esta búsqueda. Intenta con otra palabra, un nombre propio o un tema como «pacto» o «salvación»."
           />
         </div>
       )}
