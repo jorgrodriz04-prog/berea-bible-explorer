@@ -1,60 +1,45 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell } from "@/components/berea/app-shell";
-import { AppLink } from "@/components/berea/app-link";
 import { FavoriteButton } from "@/components/berea/favorite-button";
-import { Panel, SectionTitle } from "@/components/berea/section";
+import { SectionTitle } from "@/components/berea/section";
 import { RefChipList } from "@/components/berea/ref-chip";
-import { getPerson } from "@/data/people";
-import { getPlace } from "@/data/places";
-import { getEvent } from "@/data/events";
-import { getTopic } from "@/data/themes";
-import { studies } from "@/data/studies";
+import {
+  CrossRefPanel,
+  LayeredContent,
+  RelationSections,
+  SourcesNote,
+} from "@/components/berea/knowledge-panels";
+import { crossRefsForRef, entityKindLabel, getEntity, type EntityKind } from "@/lib/knowledge";
 
-type Kind = "personaje" | "lugar" | "acontecimiento" | "tema";
-
-const kindLabel: Record<Kind, string> = {
-  personaje: "Personaje",
-  lugar: "Lugar",
-  acontecimiento: "Acontecimiento",
-  tema: "Tema y doctrina",
-};
+const kinds: EntityKind[] = [
+  "personaje",
+  "lugar",
+  "acontecimiento",
+  "tema",
+  "termino",
+  "costumbre",
+  "ley",
+];
 
 export const Route = createFileRoute("/tema/$kind/$id")({
   loader: ({ params }) => {
-    const kind = params.kind as Kind;
-    const entity =
-      kind === "personaje"
-        ? getPerson(params.id)
-        : kind === "lugar"
-          ? getPlace(params.id)
-          : kind === "acontecimiento"
-            ? getEvent(params.id)
-            : kind === "tema"
-              ? getTopic(params.id)
-              : undefined;
+    if (!kinds.includes(params.kind as EntityKind)) throw notFound();
+    const entity = getEntity(params.kind, params.id);
     if (!entity) throw notFound();
-    const name = "name" in entity ? entity.name : params.id;
-    const subtitle =
-      "role" in entity
-        ? entity.role
-        : "region" in entity
-          ? entity.region
-          : "period" in entity
-            ? entity.period
-            : "kind" in entity
-              ? entity.kind
-              : "";
-    return { kind, id: params.id, name, subtitle, summary: entity.summary, refs: entity.refs };
+    return { entity };
   },
   head: ({ loaderData }) => {
-    const title = loaderData ? `${loaderData.name} — BEREA` : "BEREA";
-    const description = loaderData?.summary.slice(0, 155) ?? "Contenido bíblico en BEREA.";
+    const e = loaderData?.entity;
+    const title = e ? `${e.name} — BEREA` : "BEREA";
+    const description = e ? e.summary.slice(0, 155) : "Contenido bíblico en BEREA.";
     return {
       meta: [
         { title },
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -62,55 +47,56 @@ export const Route = createFileRoute("/tema/$kind/$id")({
 });
 
 function EntityPage() {
-  const { kind, id, name, subtitle, summary, refs } = Route.useLoaderData();
-  const related = studies.filter(
-    (s) => s.topic === id || s.people.includes(id) || s.places.includes(id),
-  );
+  const { entity } = Route.useLoaderData();
+  const crossRefs = entity.refs.filter((r) => crossRefsForRef(r));
 
   return (
     <AppShell
-      title={name}
-      subtitle={`${kindLabel[kind]}${subtitle ? ` · ${subtitle}` : ""}`}
+      title={entity.name}
+      subtitle={`${entityKindLabel[entity.kind]}${entity.subtitle ? ` · ${entity.subtitle}` : ""}`}
       back
       action={
         <FavoriteButton
           favorite={{
-            id: `${kind}:${id}`,
+            id: `${entity.kind}:${entity.id}`,
             kind: "tema",
-            title: name,
-            subtitle: kindLabel[kind],
-            body: summary,
-            path: `/tema/${kind}/${id}`,
+            title: entity.name,
+            subtitle: entityKindLabel[entity.kind],
+            body: entity.summary,
+            path: `/tema/${entity.kind}/${entity.id}`,
           }}
         />
       }
     >
-      <Panel>
-        <p className="scripture text-card-foreground">{summary}</p>
-      </Panel>
+      <LayeredContent layers={entity.layers} />
 
-      <section className="mt-6">
-        <SectionTitle>Referencias bíblicas</SectionTitle>
-        <RefChipList refs={refs} />
-      </section>
+      {entity.aliases.length ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          También aparece como: {entity.aliases.join(", ")}.
+        </p>
+      ) : null}
 
-      {related.length ? (
+      {entity.refs.length ? (
         <section className="mt-6">
-          <SectionTitle>Estudios relacionados</SectionTitle>
+          <SectionTitle>Textos bíblicos</SectionTitle>
+          <RefChipList refs={entity.refs} />
+        </section>
+      ) : null}
+
+      {crossRefs.length ? (
+        <section className="mt-6">
+          <SectionTitle>Referencias cruzadas</SectionTitle>
           <div className="space-y-3">
-            {related.map((s) => (
-              <AppLink
-                key={s.slug}
-                href={`/estudios/${s.slug}`}
-                className="no-tap-highlight block rounded-2xl border border-border bg-card p-4 shadow-soft"
-              >
-                <h3 className="font-display text-base font-semibold text-foreground">{s.title}</h3>
-                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{s.introduction}</p>
-              </AppLink>
+            {crossRefs.map((r) => (
+              <CrossRefPanel key={r} reference={r} />
             ))}
           </div>
         </section>
       ) : null}
+
+      <RelationSections relations={entity.relations} />
+
+      <SourcesNote ids={entity.sources} />
     </AppShell>
   );
 }
