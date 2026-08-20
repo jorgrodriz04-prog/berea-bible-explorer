@@ -59,28 +59,46 @@ function ChapterPage() {
     >
       {content ? (
         <ol className="space-y-4">
-          {content.verses.map((v) => (
-            <li key={v.number} className="group rounded-2xl border border-border bg-card p-4 shadow-soft">
-              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3">
-                <span className="mt-0.5 font-display text-sm font-bold text-primary">{v.number}</span>
-                <p className="scripture text-card-foreground">{v.text}</p>
-              </div>
-              <div className="mt-3 flex justify-end">
-                <FavoriteButton
-                  favorite={{
-                    id: `versiculo:${book.id}:${chapter}:${v.number}`,
-                    kind: "versiculo",
-                    title: `${book.name} ${chapter}:${v.number}`,
-                    subtitle: "Versículo",
-                    body: v.text,
-                    path: `/biblia/${book.id}/${chapter}`,
-                  }}
-                />
-              </div>
-            </li>
-          ))}
+          {content.verses.map((v) => {
+            const reference = `${book.name} ${chapter}:${v.number}`;
+            const cross = crossRefsForRef(reference);
+            return (
+              <li key={v.number} className="group rounded-2xl border border-border bg-card p-4 shadow-soft">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3">
+                  <span className="mt-0.5 font-display text-sm font-bold text-primary">{v.number}</span>
+                  <p className="scripture text-card-foreground">{v.text}</p>
+                </div>
+
+                {cross ? (
+                  <div className="mt-3 rounded-xl border border-border bg-surface p-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                      Referencias cruzadas
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">{cross.reason}</p>
+                    <div className="mt-2">
+                      <RefChipList refs={[...cross.available.map((a) => a.ref), ...cross.unavailable]} />
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="mt-3 flex justify-end">
+                  <FavoriteButton
+                    favorite={{
+                      id: `versiculo:${book.id}:${chapter}:${v.number}`,
+                      kind: "versiculo",
+                      title: reference,
+                      subtitle: "Versículo",
+                      body: v.text,
+                      path: `/biblia/${book.id}/${chapter}`,
+                    }}
+                  />
+                </div>
+              </li>
+            );
+          })}
         </ol>
       ) : (
+
         <EmptyState
           title="Capítulo sin texto todavía"
           description="La navegación ya funciona. El texto de este capítulo se cargará cuando se conecte la base de datos bíblica completa."
