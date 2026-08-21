@@ -52,9 +52,9 @@ export interface EntityRef {
 
 /** Capas de información: nunca se mezcla texto bíblico con reconstrucción o lectura. */
 export interface KnowledgeLayers {
-  biblical?: string;
-  historical?: string;
-  interpretations?: string[];
+  biblical?: string | undefined;
+  historical?: string | undefined;
+  interpretations?: string[] | undefined;
 }
 
 export interface KnowledgeEntity {

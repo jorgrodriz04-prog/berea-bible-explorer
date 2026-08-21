@@ -46,6 +46,7 @@ export interface Place {
   summary: string;
   refs: string[];
   people?: string[];
+  places?: string[];
   events?: string[];
   topics?: string[];
   terms?: string[];
@@ -120,6 +121,7 @@ export interface Term {
   events?: string[];
   topics?: string[];
   terms?: string[];
+  customs?: string[];
   sources?: string[];
 }
 
@@ -151,6 +153,7 @@ export interface Custom {
   places?: string[];
   events?: string[];
   terms?: string[];
+  customs?: string[];
   sources?: string[];
 }
 
