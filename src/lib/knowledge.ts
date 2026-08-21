@@ -9,6 +9,7 @@ import { studies } from "@/data/studies";
 import { crossReferences } from "@/data/crossReferences";
 import { getSource, sourceKindLabel } from "@/data/sources";
 import { getChapter } from "@/data/bible/verses";
+import { hasChapterText } from "@/data/bible/text";
 import { parseRef } from "./refs";
 
 export type EntityKind =
@@ -296,7 +297,7 @@ export function getEntity(kind: string, id: string): KnowledgeEntity | undefined
 export function refAvailable(ref: string): boolean {
   const parsed = parseRef(ref);
   if (!parsed.bookId || !parsed.chapter) return false;
-  return Boolean(getChapter(parsed.bookId, parsed.chapter));
+  return hasChapterText(parsed.bookId, parsed.chapter);
 }
 
 export function verseText(ref: string): string | undefined {
