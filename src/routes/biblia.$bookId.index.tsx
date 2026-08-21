@@ -1,9 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
-import { EmptyState } from "@/components/berea/section";
 import { adjacentBooks, getBook } from "@/data/bible/books";
-import { availableChapters } from "@/data/bible/verses";
 
 export const Route = createFileRoute("/biblia/$bookId/")({
   loader: ({ params }) => {
@@ -27,7 +25,6 @@ export const Route = createFileRoute("/biblia/$bookId/")({
 
 function BookPage() {
   const { book } = Route.useLoaderData();
-  const withText = new Set(availableChapters(book.id));
   const { prev, next } = adjacentBooks(book.id);
 
   return (
@@ -41,29 +38,16 @@ function BookPage() {
           <AppLink
             key={n}
             href={`/biblia/${book.id}/${n}`}
-            className={`no-tap-highlight flex min-h-14 items-center justify-center rounded-xl border text-base font-semibold shadow-soft ${
-              withText.has(n)
-                ? "border-primary/30 bg-primary/10 text-primary"
-                : "border-border bg-card text-muted-foreground"
-            }`}
+            className="no-tap-highlight flex min-h-14 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-base font-semibold text-primary shadow-soft"
           >
             {n}
           </AppLink>
         ))}
       </div>
 
-      {!withText.size ? (
-        <div className="mt-5">
-          <EmptyState
-            title="Texto pendiente de carga"
-            description="Este libro ya está disponible para navegar. El texto completo se incorporará al conectar la base de datos bíblica."
-          />
-        </div>
-      ) : (
-        <p className="mt-4 text-xs text-muted-foreground">
-          Los capítulos destacados ya incluyen texto en esta versión.
-        </p>
-      )}
+      <p className="mt-4 text-xs text-muted-foreground">
+        Texto completo Reina-Valera disponible en todos los capítulos.
+      </p>
 
       <nav className="mt-6 grid grid-cols-2 gap-3">
         {prev ? (
