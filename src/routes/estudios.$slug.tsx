@@ -1,6 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell } from "@/components/berea/app-shell";
-import { AppLink } from "@/components/berea/app-link";
 import { FavoriteButton } from "@/components/berea/favorite-button";
 import { Panel, SectionTitle } from "@/components/berea/section";
 import { RefChipList } from "@/components/berea/ref-chip";
