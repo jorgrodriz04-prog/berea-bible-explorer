@@ -1,12 +1,11 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppShell } from "@/components/berea/app-shell";
-import { AppLink } from "@/components/berea/app-link";
 import { FavoriteButton } from "@/components/berea/favorite-button";
 import { Panel, SectionTitle } from "@/components/berea/section";
 import { RefChipList } from "@/components/berea/ref-chip";
 import { getStudy } from "@/data/studies";
-import { getPerson } from "@/data/people";
-import { getPlace } from "@/data/places";
+import { RelationSections, SourcesNote } from "@/components/berea/knowledge-panels";
+import { resolveRefs } from "@/lib/knowledge";
 import { getTopic } from "@/data/themes";
 
 export const Route = createFileRoute("/estudios/$slug")({
@@ -82,52 +81,51 @@ function StudyPage() {
           </section>
         ) : null}
 
-        {study.people.length ? (
-          <section className="mt-6">
-            <SectionTitle>Personajes relacionados</SectionTitle>
-            <div className="flex flex-wrap gap-2">
-              {study.people.map((id) => {
-                const p = getPerson(id);
-                if (!p) return null;
-                return (
-                  <AppLink
-                    key={id}
-                    href={`/tema/personaje/${id}`}
-                    className="no-tap-highlight min-h-10 rounded-full border border-border bg-secondary px-3.5 text-sm font-semibold text-secondary-foreground"
-                  >
-                    {p.name}
-                  </AppLink>
-                );
-              })}
-            </div>
-          </section>
-        ) : null}
-
-        {study.places.length ? (
-          <section className="mt-6">
-            <SectionTitle>Lugares relacionados</SectionTitle>
-            <div className="flex flex-wrap gap-2">
-              {study.places.map((id) => {
-                const p = getPlace(id);
-                if (!p) return null;
-                return (
-                  <AppLink
-                    key={id}
-                    href={`/tema/lugar/${id}`}
-                    className="no-tap-highlight min-h-10 rounded-full border border-border bg-secondary px-3.5 text-sm font-semibold text-secondary-foreground"
-                  >
-                    {p.name}
-                  </AppLink>
-                );
-              })}
-            </div>
-          </section>
-        ) : null}
+        <RelationSections
+          relations={{
+            ...(resolveRefs("personaje", study.people).length
+              ? { personaje: resolveRefs("personaje", study.people) }
+              : {}),
+            ...(resolveRefs("lugar", study.places).length
+              ? { lugar: resolveRefs("lugar", study.places) }
+              : {}),
+            ...(resolveRefs("acontecimiento", study.events).length
+              ? { acontecimiento: resolveRefs("acontecimiento", study.events) }
+              : {}),
+            ...(resolveRefs("termino", study.terms).length
+              ? { termino: resolveRefs("termino", study.terms) }
+              : {}),
+            ...(resolveRefs("ley", study.laws).length ? { ley: resolveRefs("ley", study.laws) } : {}),
+            ...(resolveRefs("costumbre", study.customs).length
+              ? { costumbre: resolveRefs("costumbre", study.customs) }
+              : {}),
+          }}
+        />
 
         <section className="mt-6">
           <SectionTitle>Referencias relacionadas</SectionTitle>
           <RefChipList refs={study.crossRefs} />
         </section>
+
+        {study.interpretations?.length ? (
+          <section className="mt-6">
+            <SectionTitle>Interpretaciones posibles</SectionTitle>
+            <div className="space-y-3">
+              {study.interpretations.map((i) => (
+                <Panel key={i.view}>
+                  <p className="scripture text-card-foreground">{i.view}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{i.basis}</p>
+                </Panel>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              BEREA presenta las lecturas existentes sin imponer una conclusión: compara los textos y
+              decide con la evidencia.
+            </p>
+          </section>
+        ) : null}
+
+        {study.sources?.length ? <SourcesNote ids={study.sources} /> : null}
 
         <section className="mt-6">
           <SectionTitle>Conclusión</SectionTitle>

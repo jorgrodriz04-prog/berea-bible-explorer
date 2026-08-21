@@ -3,6 +3,8 @@ import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { EmptyState } from "@/components/berea/section";
 import { FavoriteButton } from "@/components/berea/favorite-button";
+import { RefChipList } from "@/components/berea/ref-chip";
+import { crossRefsForRef } from "@/lib/knowledge";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { getChapter } from "@/data/bible/verses";
 
