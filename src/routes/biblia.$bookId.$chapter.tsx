@@ -6,14 +6,14 @@ import { FavoriteButton } from "@/components/berea/favorite-button";
 import { RefChipList } from "@/components/berea/ref-chip";
 import { crossRefsForRef } from "@/lib/knowledge";
 import { adjacentBooks, getBook } from "@/data/bible/books";
-import { getChapter } from "@/data/bible/verses";
+import { loadChapter } from "@/data/bible/text";
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const book = getBook(params.bookId);
     const chapter = Number(params.chapter);
     if (!book || !Number.isFinite(chapter) || chapter < 1 || chapter > book.chapters) throw notFound();
-    return { book, chapter, content: getChapter(book.id, chapter) ?? null };
+    return { book, chapter, content: await loadChapter(book.id, chapter) };
   },
   head: ({ loaderData }) => {
     const label = loaderData ? `${loaderData.book.name} ${loaderData.chapter}` : "Lectura";
