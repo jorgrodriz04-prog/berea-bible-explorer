@@ -1,5 +1,4 @@
 import { books } from "@/data/bible/books";
-import { chapters } from "@/data/bible/verses";
 import { people } from "@/data/people";
 import { places } from "@/data/places";
 import { events } from "@/data/events";
@@ -37,8 +36,6 @@ interface IndexEntry extends Omit<SearchResult, "score"> {
   haystacks: string[];
 }
 
-const bookName = (id: string) => books.find((b) => b.id === id)?.name ?? id;
-
 let cache: IndexEntry[] | null = null;
 
 /** Índice unificado. Cuando exista base de datos, esta función es el único punto a cambiar. */
@@ -56,19 +53,6 @@ export function buildIndex(): IndexEntry[] {
       path: `/biblia/${b.id}`,
       haystacks: [b.name, b.abbr, b.group],
     });
-  }
-
-  for (const c of chapters) {
-    for (const v of c.verses) {
-      entries.push({
-        id: `verso:${c.bookId}:${c.chapter}:${v.number}`,
-        type: "versiculo",
-        title: `${bookName(c.bookId)} ${c.chapter}:${v.number}`,
-        body: v.text,
-        path: `/biblia/${c.bookId}/${c.chapter}`,
-        haystacks: [v.text, `${bookName(c.bookId)} ${c.chapter}:${v.number}`],
-      });
-    }
   }
 
   for (const p of people) {
