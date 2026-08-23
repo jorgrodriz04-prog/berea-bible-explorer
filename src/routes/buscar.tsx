@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/berea/section";
 import { ResultCard } from "@/components/berea/result-card";
 import { Input } from "@/components/ui/input";
 import { AppLink } from "@/components/berea/app-link";
+import { searchVerses } from "@/lib/verseSearch";
 import {
   search,
   groupedSearch,
@@ -13,6 +14,7 @@ import {
   suggestedQueries,
   resultTypeLabel,
   type ResultType,
+  type SearchResult,
 } from "@/lib/search";
 
 const filters: Array<ResultType | "todo"> = [
@@ -69,17 +71,48 @@ function BuscarPage() {
     return () => clearTimeout(id);
   }, [term, q, navigate]);
 
-  const results = useMemo(() => search(q, tipo), [q, tipo]);
-  const groups = useMemo(() => groupedSearch(q, tipo), [q, tipo]);
+  const [verses, setVerses] = useState<SearchResult[]>([]);
+  const [versesLoading, setVersesLoading] = useState(false);
+
+  useEffect(() => {
+    if (q.trim().length < 2) {
+      setVerses([]);
+      return;
+    }
+    let active = true;
+    setVersesLoading(true);
+    searchVerses(q)
+      .then((r) => {
+        if (active) setVerses(r);
+      })
+      .finally(() => {
+        if (active) setVersesLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [q]);
+
+  const knowledge = useMemo(() => search(q, tipo), [q, tipo]);
+  const showVerses = tipo === "todo" || tipo === "versiculo";
+  const results = useMemo(
+    () => (showVerses ? [...verses, ...knowledge] : knowledge),
+    [showVerses, verses, knowledge],
+  );
+  const groups = useMemo(() => {
+    const base = groupedSearch(q, tipo);
+    if (!showVerses || !verses.length) return base;
+    return [{ type: "versiculo" as ResultType, label: "Versículo", results: verses }, ...base];
+  }, [q, tipo, showVerses, verses]);
   const shortcut = useMemo(() => refShortcut(q), [q]);
 
   const counts = useMemo(() => {
-    const all = search(q, "todo");
+    const all = [...verses, ...search(q, "todo")];
     const map = new Map<string, number>();
     for (const r of all) map.set(r.type, (map.get(r.type) ?? 0) + 1);
     map.set("todo", all.length);
     return map;
-  }, [q]);
+  }, [q, verses]);
 
   return (
     <AppShell title="Buscar" subtitle="Palabras, temas, personajes y lugares">
@@ -153,7 +186,7 @@ function BuscarPage() {
             encuentran resultados.
           </p>
         </section>
-      ) : results.length ? (
+      ) : results.length || versesLoading ? (
         <div className="mt-5 space-y-6">
           {shortcut ? (
             <AppLink
@@ -165,6 +198,9 @@ function BuscarPage() {
               </p>
               <p className="mt-1 font-display text-base font-semibold text-foreground">{shortcut.label}</p>
             </AppLink>
+          ) : null}
+          {versesLoading ? (
+            <p className="text-sm text-muted-foreground">Buscando en el texto bíblico completo…</p>
           ) : null}
           {groups.map((g) => (
             <section key={g.type}>

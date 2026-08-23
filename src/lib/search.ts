@@ -36,8 +36,6 @@ interface IndexEntry extends Omit<SearchResult, "score"> {
   haystacks: string[];
 }
 
-const bookName = (id: string) => books.find((b) => b.id === id)?.name ?? id;
-
 let cache: IndexEntry[] | null = null;
 
 /** Índice unificado. Cuando exista base de datos, esta función es el único punto a cambiar. */
