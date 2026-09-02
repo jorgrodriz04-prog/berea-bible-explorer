@@ -97,6 +97,9 @@ function AjustesPage() {
           ))}
         </div>
       </Panel>
+      </div>
+
+
 
       <div className="mt-6">
         <SectionTitle>Tamaño del texto bíblico</SectionTitle>
