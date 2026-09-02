@@ -5,6 +5,7 @@ import { Panel, SectionTitle } from "@/components/berea/section";
 import { useSettings, type ThemeMode } from "@/lib/settings";
 import { useFavorites } from "@/lib/favorites";
 import { AI_SCOPE_RULES } from "@/lib/ai";
+import { bibleVersions } from "@/data/bible/versions";
 
 export const Route = createFileRoute("/ajustes/")({
   head: () => ({
@@ -35,12 +36,49 @@ const scales = [
 ];
 
 function AjustesPage() {
-  const { theme, setTheme, fontScale, setFontScale } = useSettings();
+  const { theme, setTheme, fontScale, setFontScale, versionId, setVersionId } = useSettings();
   const { favorites, clear } = useFavorites();
 
   return (
     <AppShell title="Ajustes" subtitle="Apariencia, lectura y cuenta">
+      <SectionTitle>Versión bíblica</SectionTitle>
+      <Panel>
+        <ul className="space-y-2">
+          {bibleVersions.map((v) => {
+            const selected = v.id === versionId;
+            const needsProvider = v.delivery === "proveedor-licenciado";
+            return (
+              <li key={v.id}>
+                <button
+                  type="button"
+                  onClick={() => setVersionId(v.id)}
+                  className={`no-tap-highlight w-full rounded-xl border p-3 text-left ${
+                    selected ? "border-primary bg-primary/10" : "border-border"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="font-semibold text-foreground">{v.name}</span>
+                    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                      {v.label}
+                    </span>
+                    {needsProvider ? (
+                      <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-gold">
+                        Requiere fuente autorizada
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted-foreground">{v.note}</span>
+                  <span className="mt-1 block text-[11px] text-muted-foreground">{v.license}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </Panel>
+
+      <div className="mt-6">
       <SectionTitle>Apariencia</SectionTitle>
+
       <Panel>
         <div className="grid grid-cols-3 gap-2">
           {themes.map(({ value, label, icon: Icon }) => (
@@ -60,6 +98,9 @@ function AjustesPage() {
           ))}
         </div>
       </Panel>
+      </div>
+
+
 
       <div className="mt-6">
         <SectionTitle>Tamaño del texto bíblico</SectionTitle>
@@ -128,9 +169,10 @@ function AjustesPage() {
           <li className="flex min-h-14 items-center gap-3 px-4">
             <UserRound className="size-5 shrink-0 text-muted-foreground" />
             <span className="min-w-0 flex-1">
-              <span className="block font-semibold text-foreground">Cuenta</span>
+              <span className="block font-semibold text-foreground">Cuenta — modo invitado</span>
               <span className="block text-xs text-muted-foreground">
-                Inicio de sesión y eliminación de cuenta: disponible al activar autenticación.
+                Estás usando BEREA como invitado: no hace falta registrarse. El inicio de sesión será
+                opcional y solo servirá para sincronizar favoritos entre dispositivos.
               </span>
             </span>
           </li>

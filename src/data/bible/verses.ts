@@ -1,7 +1,7 @@
 import type { ChapterContent } from "../types";
 
 /**
- * Contenido bíblico de muestra (Reina-Valera, dominio público).
+ * Contenido bíblico de muestra: Reina-Valera 1909 (RVR1909, dominio público). No es RVR1960.
  * La estructura está lista para reemplazarse por una base de datos completa:
  * misma forma de datos -> misma UI, sin cambiar componentes.
  */

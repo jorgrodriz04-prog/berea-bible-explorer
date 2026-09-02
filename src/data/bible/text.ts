@@ -3,7 +3,7 @@ import { getBook } from "./books";
 
 type BookText = { bookId: string; chapters: string[][] };
 
-/** Texto bíblico completo (Reina-Valera, dominio público), un archivo por libro. */
+/** Texto bíblico completo Reina-Valera 1909 (RVR1909, dominio público), un archivo por libro. NO es RVR1960. */
 const modules = import.meta.glob<{ default: BookText }>("./text/*.json");
 
 const pathFor = (bookId: string) => `./text/${bookId}.json`;

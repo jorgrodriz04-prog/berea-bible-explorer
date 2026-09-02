@@ -28,7 +28,9 @@ function Info() {
       <Panel className="mt-4">
         <h2 className="font-display text-lg font-semibold text-foreground">Qué incluye hoy</h2>
         <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-          <li>• Navegación completa por los 66 libros, capítulos y versículos.</li>
+          <li>• Acceso como invitado: sin registro ni inicio de sesión.</li>
+          <li>• Navegación completa por los 66 libros, 1189 capítulos y 31.102 versículos.</li>
+          <li>• Texto Reina-Valera 1909 (RVR1909, dominio público) incluido y disponible sin conexión.</li>
           <li>• Buscador tolerante a errores por palabra, frase, personaje, lugar, tema o doctrina.</li>
           <li>• Estudios bíblicos con contexto histórico y referencias cruzadas.</li>
           <li>• Favoritos guardados en el dispositivo.</li>
@@ -38,8 +40,9 @@ function Info() {
       <Panel className="mt-4">
         <h2 className="font-display text-lg font-semibold text-foreground">Próximos pasos</h2>
         <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-          <li>• Texto bíblico completo desde base de datos.</li>
-          <li>• Cuentas de usuario y sincronización de favoritos.</li>
+          <li>• Reina-Valera 1960 (RVR1960) como versión principal, servida desde un proveedor con
+            licencia autorizada. Su texto no se incluye en la aplicación.</li>
+          <li>• Cuentas opcionales y sincronización de favoritos (el uso seguirá siendo posible sin cuenta).</li>
           <li>• Asistente de estudio con IA limitado al ámbito bíblico.</li>
           <li>• Empaquetado como aplicación Android.</li>
         </ul>

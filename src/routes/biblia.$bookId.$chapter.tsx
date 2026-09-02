@@ -1,12 +1,24 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { EmptyState } from "@/components/berea/section";
 import { FavoriteButton } from "@/components/berea/favorite-button";
 import { RefChipList } from "@/components/berea/ref-chip";
+import { LicensedVersionNotice, VersionBadge } from "@/components/berea/version-badge";
 import { crossRefsForRef } from "@/lib/knowledge";
+import { useSettings } from "@/lib/settings";
+import { fetchLicensedChapter } from "@/lib/bible.functions";
+import {
+  getVersion,
+  publicDomainVersion,
+  PUBLIC_DOMAIN_VERSION_ID,
+} from "@/data/bible/versions";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { loadChapter } from "@/data/bible/text";
+import type { ChapterContent } from "@/data/types";
+
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
   loader: async ({ params }) => {
@@ -30,7 +42,32 @@ export const Route = createFileRoute("/biblia/$bookId/$chapter")({
 });
 
 function ChapterPage() {
-  const { book, chapter, content } = Route.useLoaderData();
+  const { book, chapter, content: publicDomainContent } = Route.useLoaderData();
+  const { versionId, setVersionId } = useSettings();
+  const version = getVersion(versionId) ?? publicDomainVersion;
+  const needsProvider = version.delivery === "proveedor-licenciado";
+
+  const fetchLicensed = useServerFn(fetchLicensedChapter);
+  const licensed = useQuery({
+    queryKey: ["capitulo-licenciado", version.id, book.id, chapter],
+    queryFn: () => fetchLicensed({ data: { bookId: book.id, chapter } }),
+    enabled: needsProvider,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const result = licensed.data as
+    | { status: "ok"; content: ChapterContent; attribution: string }
+    | { status: "no-disponible"; detail: string }
+    | { status: "sin-proveedor" }
+    | undefined;
+  const licensedOk = result && result.status === "ok" ? result : null;
+
+  const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
+  const providerDetail =
+    result && result.status === "no-disponible"
+      ? result.detail
+      : "Su texto no se incluye en la aplicación. Configura un proveedor con licencia autorizada para leerlo aquí.";
+
   const { prev: prevBook, next: nextBook } = adjacentBooks(book.id);
   const prevHref =
     chapter > 1
@@ -59,7 +96,28 @@ function ChapterPage() {
         </AppLink>
       }
     >
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <VersionBadge version={version} />
+        <span className="truncate text-xs text-muted-foreground">
+          {licensedOk ? licensedOk.attribution : version.license}
+        </span>
+      </div>
+
+      {needsProvider && licensed.isLoading ? (
+        <p className="text-sm text-muted-foreground">Consultando el proveedor con licencia…</p>
+      ) : null}
+
+      {needsProvider && !licensed.isLoading && !licensedOk ? (
+        <LicensedVersionNotice
+          version={version}
+          detail={providerDetail}
+          fallback={publicDomainVersion}
+          onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
+        />
+      ) : null}
+
       {content ? (
+
         <ol className="space-y-4">
           {content.verses.map((v) => {
             const reference = `${book.name} ${chapter}:${v.number}`;
@@ -99,13 +157,13 @@ function ChapterPage() {
             );
           })}
         </ol>
-      ) : (
-
+      ) : needsProvider ? null : (
         <EmptyState
           title="Capítulo sin texto todavía"
           description="La navegación ya funciona. El texto de este capítulo se cargará cuando se conecte la base de datos bíblica completa."
         />
       )}
+
 
       <nav className="mt-6 grid grid-cols-2 gap-3">
         {prevHref ? (
