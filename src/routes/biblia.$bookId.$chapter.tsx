@@ -54,11 +54,12 @@ function ChapterPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const licensedOk = licensed.data?.status === "ok" ? licensed.data : null;
+  const result = licensed.data;
+  const licensedOk = result && result.status === "ok" ? result : null;
   const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
   const providerDetail =
-    licensed.data?.status === "no-disponible"
-      ? licensed.data.detail
+    result && result.status === "no-disponible"
+      ? result.detail
       : "Su texto no se incluye en la aplicación. Configura un proveedor con licencia autorizada para leerlo aquí.";
 
   const { prev: prevBook, next: nextBook } = adjacentBooks(book.id);
