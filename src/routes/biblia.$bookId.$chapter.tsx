@@ -41,7 +41,26 @@ export const Route = createFileRoute("/biblia/$bookId/$chapter")({
 });
 
 function ChapterPage() {
-  const { book, chapter, content } = Route.useLoaderData();
+  const { book, chapter, content: publicDomainContent } = Route.useLoaderData();
+  const { versionId, setVersionId } = useSettings();
+  const version = getVersion(versionId) ?? publicDomainVersion;
+  const needsProvider = version.delivery === "proveedor-licenciado";
+
+  const fetchLicensed = useServerFn(fetchLicensedChapter);
+  const licensed = useQuery({
+    queryKey: ["capitulo-licenciado", version.id, book.id, chapter],
+    queryFn: () => fetchLicensed({ data: { bookId: book.id, chapter } }),
+    enabled: needsProvider,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const licensedOk = licensed.data?.status === "ok" ? licensed.data : null;
+  const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
+  const providerDetail =
+    licensed.data?.status === "no-disponible"
+      ? licensed.data.detail
+      : "Su texto no se incluye en la aplicación. Configura un proveedor con licencia autorizada para leerlo aquí.";
+
   const { prev: prevBook, next: nextBook } = adjacentBooks(book.id);
   const prevHref =
     chapter > 1
@@ -70,7 +89,28 @@ function ChapterPage() {
         </AppLink>
       }
     >
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <VersionBadge version={version} />
+        <span className="truncate text-xs text-muted-foreground">
+          {licensedOk ? licensedOk.attribution : version.license}
+        </span>
+      </div>
+
+      {needsProvider && licensed.isLoading ? (
+        <p className="text-sm text-muted-foreground">Consultando el proveedor con licencia…</p>
+      ) : null}
+
+      {needsProvider && !licensed.isLoading && !licensedOk ? (
+        <LicensedVersionNotice
+          version={version}
+          detail={providerDetail}
+          fallback={publicDomainVersion}
+          onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
+        />
+      ) : null}
+
       {content ? (
+
         <ol className="space-y-4">
           {content.verses.map((v) => {
             const reference = `${book.name} ${chapter}:${v.number}`;
