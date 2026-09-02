@@ -34,7 +34,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setSettings({ ...defaults, ...(JSON.parse(raw) as Partial<Settings>) });
+      if (raw) {
+        const stored = JSON.parse(raw) as Partial<Settings>;
+        const merged = { ...defaults, ...stored };
+        // Una versión desconocida (o eliminada) nunca debe dejar el lector sin texto.
+        if (!getVersion(merged.versionId)) merged.versionId = defaults.versionId;
+        setSettings(merged);
+      }
     } catch {
       /* ignorar */
     }
@@ -64,7 +70,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       resolvedTheme,
       setTheme: (theme) => setSettings((s) => ({ ...s, theme })),
       setFontScale: (fontScale) => setSettings((s) => ({ ...s, fontScale })),
+      setVersionId: (versionId) => setSettings((s) => ({ ...s, versionId })),
     }),
+
     [settings, resolvedTheme],
   );
 
