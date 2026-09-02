@@ -5,6 +5,7 @@ import { Panel, SectionTitle } from "@/components/berea/section";
 import { useSettings, type ThemeMode } from "@/lib/settings";
 import { useFavorites } from "@/lib/favorites";
 import { AI_SCOPE_RULES } from "@/lib/ai";
+import { bibleVersions } from "@/data/bible/versions";
 
 export const Route = createFileRoute("/ajustes/")({
   head: () => ({
@@ -168,9 +169,10 @@ function AjustesPage() {
           <li className="flex min-h-14 items-center gap-3 px-4">
             <UserRound className="size-5 shrink-0 text-muted-foreground" />
             <span className="min-w-0 flex-1">
-              <span className="block font-semibold text-foreground">Cuenta</span>
+              <span className="block font-semibold text-foreground">Cuenta — modo invitado</span>
               <span className="block text-xs text-muted-foreground">
-                Inicio de sesión y eliminación de cuenta: disponible al activar autenticación.
+                Estás usando BEREA como invitado: no hace falta registrarse. El inicio de sesión será
+                opcional y solo servirá para sincronizar favoritos entre dispositivos.
               </span>
             </span>
           </li>
