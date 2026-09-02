@@ -150,13 +150,13 @@ function ChapterPage() {
             );
           })}
         </ol>
-      ) : (
-
+      ) : needsProvider ? null : (
         <EmptyState
           title="Capítulo sin texto todavía"
           description="La navegación ya funciona. El texto de este capítulo se cargará cuando se conecte la base de datos bíblica completa."
         />
       )}
+
 
       <nav className="mt-6 grid grid-cols-2 gap-3">
         {prevHref ? (
