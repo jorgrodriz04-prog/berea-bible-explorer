@@ -1,12 +1,23 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { EmptyState } from "@/components/berea/section";
 import { FavoriteButton } from "@/components/berea/favorite-button";
 import { RefChipList } from "@/components/berea/ref-chip";
+import { LicensedVersionNotice, VersionBadge } from "@/components/berea/version-badge";
 import { crossRefsForRef } from "@/lib/knowledge";
+import { useSettings } from "@/lib/settings";
+import { fetchLicensedChapter } from "@/lib/bible.functions";
+import {
+  getVersion,
+  publicDomainVersion,
+  PUBLIC_DOMAIN_VERSION_ID,
+} from "@/data/bible/versions";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { loadChapter } from "@/data/bible/text";
+
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
   loader: async ({ params }) => {
