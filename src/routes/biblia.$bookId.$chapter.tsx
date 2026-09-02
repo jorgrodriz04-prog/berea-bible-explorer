@@ -17,6 +17,7 @@ import {
 } from "@/data/bible/versions";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { loadChapter } from "@/data/bible/text";
+import type { ChapterContent } from "@/data/types";
 
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
