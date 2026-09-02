@@ -8,7 +8,7 @@ import type { Source } from "../types";
 export const sources: Source[] = [
   {
     id: "biblia-rv",
-    name: "Biblia (Reina-Valera, dominio público)",
+    name: "Biblia — Reina-Valera 1909 (RVR1909, dominio público)",
     kind: "biblia",
     description: "Texto bíblico citado directamente. Es la fuente primaria de BEREA.",
   },

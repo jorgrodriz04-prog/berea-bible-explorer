@@ -46,7 +46,7 @@ function BookPage() {
       </div>
 
       <p className="mt-4 text-xs text-muted-foreground">
-        Texto completo Reina-Valera disponible en todos los capítulos.
+        Texto completo Reina-Valera 1909 (RVR1909, dominio público) disponible en todos los capítulos. RVR1960 requiere una fuente con licencia autorizada.
       </p>
 
       <nav className="mt-6 grid grid-cols-2 gap-3">
