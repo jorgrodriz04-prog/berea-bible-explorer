@@ -35,12 +35,49 @@ const scales = [
 ];
 
 function AjustesPage() {
-  const { theme, setTheme, fontScale, setFontScale } = useSettings();
+  const { theme, setTheme, fontScale, setFontScale, versionId, setVersionId } = useSettings();
   const { favorites, clear } = useFavorites();
 
   return (
     <AppShell title="Ajustes" subtitle="Apariencia, lectura y cuenta">
+      <SectionTitle>Versión bíblica</SectionTitle>
+      <Panel>
+        <ul className="space-y-2">
+          {bibleVersions.map((v) => {
+            const selected = v.id === versionId;
+            const needsProvider = v.delivery === "proveedor-licenciado";
+            return (
+              <li key={v.id}>
+                <button
+                  type="button"
+                  onClick={() => setVersionId(v.id)}
+                  className={`no-tap-highlight w-full rounded-xl border p-3 text-left ${
+                    selected ? "border-primary bg-primary/10" : "border-border"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="font-semibold text-foreground">{v.name}</span>
+                    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                      {v.label}
+                    </span>
+                    {needsProvider ? (
+                      <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-gold">
+                        Requiere fuente autorizada
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted-foreground">{v.note}</span>
+                  <span className="mt-1 block text-[11px] text-muted-foreground">{v.license}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </Panel>
+
+      <div className="mt-6">
       <SectionTitle>Apariencia</SectionTitle>
+
       <Panel>
         <div className="grid grid-cols-3 gap-2">
           {themes.map(({ value, label, icon: Icon }) => (
