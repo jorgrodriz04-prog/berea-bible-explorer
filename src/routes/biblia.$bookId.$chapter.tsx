@@ -54,8 +54,13 @@ function ChapterPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const result = licensed.data;
+  const result = licensed.data as
+    | { status: "ok"; content: ChapterContent; attribution: string }
+    | { status: "no-disponible"; detail: string }
+    | { status: "sin-proveedor" }
+    | undefined;
   const licensedOk = result && result.status === "ok" ? result : null;
+
   const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
   const providerDetail =
     result && result.status === "no-disponible"
