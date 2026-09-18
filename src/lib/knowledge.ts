@@ -299,10 +299,15 @@ export function refAvailable(ref: string): boolean {
   return hasChapterText(parsed.bookId, parsed.chapter);
 }
 
-export function verseText(ref: string): string | undefined {
+/**
+ * Texto de una referencia, leído de la única fuente de verdad: la Biblia
+ * completa RVR1909 (dominio público) incluida en src/data/bible/text.
+ * Carga diferida por libro; devuelve undefined si el pasaje no existe.
+ */
+export async function verseText(ref: string): Promise<string | undefined> {
   const parsed = parseRef(ref);
   if (!parsed.bookId || !parsed.chapter) return undefined;
-  const chapter = getChapter(parsed.bookId, parsed.chapter);
+  const chapter = await loadChapter(parsed.bookId, parsed.chapter);
   if (!chapter) return undefined;
   if (parsed.verse === undefined) return chapter.verses[0]?.text;
   return chapter.verses.find((v) => v.number === parsed.verse)?.text;
