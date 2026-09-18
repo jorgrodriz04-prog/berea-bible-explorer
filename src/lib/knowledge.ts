@@ -8,8 +8,7 @@ import { laws } from "@/data/laws";
 import { studies } from "@/data/studies";
 import { crossReferences } from "@/data/crossReferences";
 import { getSource, sourceKindLabel } from "@/data/sources";
-import { getChapter } from "@/data/bible/verses";
-import { hasChapterText } from "@/data/bible/text";
+import { hasChapterText, loadChapter } from "@/data/bible/text";
 import { parseRef } from "./refs";
 
 export type EntityKind =
