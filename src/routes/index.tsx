@@ -5,9 +5,11 @@ import { AppLink } from "@/components/berea/app-link";
 import { Panel, SectionTitle } from "@/components/berea/section";
 import { studies } from "@/data/studies";
 import { topics } from "@/data/themes";
-import { getChapter } from "@/data/bible/verses";
+import { loadChapter } from "@/data/bible/text";
+import { publicDomainVersion } from "@/data/bible/versions";
 
 export const Route = createFileRoute("/")({
+  loader: () => loadChapter("salmos", 23),
   head: () => ({
     meta: [
       { title: "BEREA — Estudia la Biblia con profundidad" },
@@ -33,7 +35,7 @@ const accesses = [
 ];
 
 function Home() {
-  const psalm = getChapter("salmos", 23);
+  const psalm = Route.useLoaderData();
   const verse = psalm?.verses[0];
   const featured = studies.slice(0, 2);
 
@@ -86,7 +88,9 @@ function Home() {
           </SectionTitle>
           <Panel>
             <p className="scripture text-card-foreground">{verse.text}</p>
-            <p className="mt-2 text-xs font-semibold text-muted-foreground">Salmos 23:1</p>
+            <p className="mt-2 text-xs font-semibold text-muted-foreground">
+              Salmos 23:1 · {publicDomainVersion.label} ({publicDomainVersion.license.replace(/\.$/, "")})
+            </p>
           </Panel>
         </section>
       ) : null}
