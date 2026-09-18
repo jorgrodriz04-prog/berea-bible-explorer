@@ -90,7 +90,7 @@ const typeToKind: Partial<Record<ResultType, EntityKind>> = {
 };
 
 /** 1-8: recupera del conocimiento de BEREA todo lo relacionado con la pregunta. */
-export function buildBibleAiContext(input: BibleAiQuestion): BibleAiContext {
+export async function buildBibleAiContext(input: BibleAiQuestion): Promise<BibleAiContext> {
   const question = input.question.trim();
   const keywords = tokens(question);
   const results = search(question, "todo");
@@ -104,7 +104,7 @@ export function buildBibleAiContext(input: BibleAiQuestion): BibleAiContext {
   const directRef = parseRef(question);
   if (directRef.path && directRef.bookName && directRef.chapter) {
     const ref = `${directRef.bookName} ${directRef.chapter}${directRef.verse ? `:${directRef.verse}` : ""}`;
-    const text = verseText(ref);
+    const text = await verseText(ref);
     if (text) {
       passages.push({ ref, text, path: directRef.path });
       sourceIds.add("biblia-rv");
@@ -113,7 +113,7 @@ export function buildBibleAiContext(input: BibleAiQuestion): BibleAiContext {
 
   for (const r of results.slice(0, 24)) {
     if (r.type === "versiculo") {
-      const text = verseText(r.title);
+      const text = await verseText(r.title);
       if (text && !passages.some((p) => p.ref === r.title)) {
         passages.push({ ref: r.title, text, path: r.path });
         sourceIds.add("biblia-rv");
@@ -163,7 +163,7 @@ export function buildBibleAiContext(input: BibleAiQuestion): BibleAiContext {
  * con el material recuperado, sin generar afirmaciones nuevas.
  */
 export async function askBibleQuestion(input: BibleAiQuestion): Promise<BibleAiAnswer> {
-  const context = buildBibleAiContext(input);
+  const context = await buildBibleAiContext(input);
   const hasEvidence = context.passages.length > 0 || context.entities.length > 0;
 
   if (!hasEvidence) {
