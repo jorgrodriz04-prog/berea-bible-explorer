@@ -1,11 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Search as SearchIcon, X } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/berea/app-shell";
 import { EmptyState } from "@/components/berea/section";
 import { ResultCard } from "@/components/berea/result-card";
 import { Input } from "@/components/ui/input";
 import { AppLink } from "@/components/berea/app-link";
+import { LicensedVersionNotice, VersionCaption } from "@/components/berea/version-badge";
+import { useBibleVersion } from "@/lib/use-bible-version";
+import { searchLicensedVerses } from "@/lib/bible.functions";
+import { getBook } from "@/data/bible/books";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 import { searchVerses } from "@/lib/verseSearch";
 import {
   search,
@@ -71,19 +77,66 @@ function BuscarPage() {
     return () => clearTimeout(id);
   }, [term, q, navigate]);
 
+  // El buscador bíblico siempre consulta la versión activa. Con RVR1960 se
+  // busca en la fuente autorizada; sin ella no se devuelven versículos de otra
+  // versión: se informa y el usuario decide si cambia de versión.
+  const { version, needsProvider, textAvailable, checking, missingMessage, fallback, setVersionId } =
+    useBibleVersion();
+  const searchLicensed = useServerFn(searchLicensedVerses);
+
   const [verses, setVerses] = useState<SearchResult[]>([]);
   const [versesLoading, setVersesLoading] = useState(false);
+  const [versesDetail, setVersesDetail] = useState<string | null>(null);
 
   useEffect(() => {
-    if (q.trim().length < 2) {
+    setVersesDetail(null);
+    if (q.trim().length < 2 || (needsProvider && !textAvailable)) {
       setVerses([]);
+      setVersesLoading(false);
       return;
     }
     let active = true;
     setVersesLoading(true);
-    searchVerses(q)
-      .then((r) => {
-        if (active) setVerses(r);
+
+    const run = async (): Promise<{ results: SearchResult[]; detail: string | null }> => {
+      if (!needsProvider) return { results: await searchVerses(q), detail: null };
+      const res = (await searchLicensed({ data: { query: q } })) as
+        | {
+            status: "ok";
+            results: { bookId: string; chapter: number; verse: number; reference: string; text: string }[];
+          }
+        | { status: "no-disponible"; detail: string }
+        | { status: "sin-proveedor" };
+      if (res.status === "sin-proveedor") return { results: [], detail: missingMessage };
+      if (res.status === "no-disponible") return { results: [], detail: res.detail };
+      return {
+        results: res.results.map((r) => {
+          const book = getBook(r.bookId);
+          return {
+            id: `verso:${r.bookId}:${r.chapter}:${r.verse}`,
+            type: "versiculo" as ResultType,
+            title: r.reference || `${book?.name ?? r.bookId} ${r.chapter}:${r.verse}`,
+            subtitle: book?.group ?? version.label,
+            body: r.text,
+            path: `/biblia/${r.bookId}/${r.chapter}`,
+            score: 80,
+          };
+        }),
+        detail: null,
+      };
+    };
+
+    run()
+      .then(({ results, detail }) => {
+        if (!active) return;
+        setVerses(results);
+        setVersesDetail(detail);
+      })
+      .catch(() => {
+        if (active) {
+          setVerses([]);
+          setVersesDetail("No se pudo completar la búsqueda en la fuente autorizada.");
+        }
       })
       .finally(() => {
         if (active) setVersesLoading(false);
@@ -91,7 +144,7 @@ function BuscarPage() {
     return () => {
       active = false;
     };
-  }, [q]);
+  }, [q, needsProvider, textAvailable, missingMessage, searchLicensed, version.label]);
 
   const knowledge = useMemo(() => search(q, tipo), [q, tipo]);
   const showVerses = tipo === "todo" || tipo === "versiculo";

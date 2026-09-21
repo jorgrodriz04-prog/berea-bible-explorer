@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { BookOpen, GraduationCap, Search, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { Panel, SectionTitle } from "@/components/berea/section";
+import { LicensedVersionNotice, VersionCaption } from "@/components/berea/version-badge";
+import { useBibleVersion } from "@/lib/use-bible-version";
+import { fetchLicensedVerses } from "@/lib/bible.functions";
 import { studies } from "@/data/studies";
 import { topics } from "@/data/themes";
 import { loadChapter } from "@/data/bible/text";
-import { publicDomainVersion } from "@/data/bible/versions";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 
 export const Route = createFileRoute("/")({
   loader: () => loadChapter("salmos", 23),
@@ -34,10 +39,41 @@ const accesses = [
   { href: "/estudios", label: "Estudios", detail: `${studies.length} disponibles`, icon: GraduationCap },
 ];
 
+const DAILY_REF = { ref: "Salmos 23:1", bookId: "salmos", chapter: 23, verse: 1 };
+
 function Home() {
   const psalm = Route.useLoaderData();
-  const verse = psalm?.verses[0];
   const featured = studies.slice(0, 2);
+  const { version, needsProvider, textAvailable, checking, missingMessage, fallback, setVersionId } =
+    useBibleVersion();
+
+  // El versículo del día siempre se cita en la versión activa: si es RVR1960 se
+  // pide a la fuente autorizada y, sin ella, se informa en vez de sustituirlo.
+  const fetchVerses = useServerFn(fetchLicensedVerses);
+  const licensed = useQuery({
+    queryKey: ["versiculo-dia-licenciado", version.id],
+    queryFn: () => fetchVerses({ data: { refs: [DAILY_REF] } }),
+    enabled: needsProvider && textAvailable,
+    staleTime: 10 * 60 * 1000,
+  });
+  const licensedResult = licensed.data as
+    | { status: "ok"; verses: { ref: string; text: string }[]; attribution: string }
+    | { status: "no-disponible"; detail: string }
+    | { status: "sin-proveedor" }
+    | undefined;
+
+  const licensedText =
+    licensedResult && licensedResult.status === "ok"
+      ? licensedResult.verses.find((v) => v.ref === DAILY_REF.ref)?.text
+      : undefined;
+  const attribution =
+    licensedResult && licensedResult.status === "ok" ? licensedResult.attribution : undefined;
+
+  const verseText = needsProvider ? licensedText : psalm?.verses[0]?.text;
+  const providerDetail =
+    licensedResult && licensedResult.status === "no-disponible"
+      ? licensedResult.detail
+      : missingMessage;
 
   return (
     <AppShell title="BEREA" subtitle="Escudriñando cada día las Escrituras">
@@ -75,25 +111,38 @@ function Home() {
         ))}
       </div>
 
-      {verse ? (
-        <section className="mt-6">
-          <SectionTitle
-            action={
-              <AppLink href="/biblia/salmos/23" className="text-xs font-semibold text-primary">
-                Abrir capítulo
-              </AppLink>
-            }
-          >
-            Versículo del día
-          </SectionTitle>
+      <section className="mt-6">
+        <SectionTitle
+          action={
+            <AppLink href="/biblia/salmos/23" className="text-xs font-semibold text-primary">
+              Abrir capítulo
+            </AppLink>
+          }
+        >
+          Versículo del día
+        </SectionTitle>
+        {verseText ? (
           <Panel>
-            <p className="scripture text-card-foreground">{verse.text}</p>
-            <p className="mt-2 text-xs font-semibold text-muted-foreground">
-              Salmos 23:1 · {publicDomainVersion.label} ({publicDomainVersion.license.replace(/\.$/, "")})
+            <p className="scripture text-card-foreground">{verseText}</p>
+            <p className="mt-2">
+              <span className="text-xs font-semibold text-muted-foreground">{DAILY_REF.ref} · </span>
+              <VersionCaption version={version} attribution={attribution} />
             </p>
           </Panel>
-        </section>
-      ) : null}
+        ) : checking || licensed.isLoading ? (
+          <Panel>
+            <p className="text-sm text-muted-foreground">Consultando la fuente autorizada…</p>
+          </Panel>
+        ) : (
+          <LicensedVersionNotice
+            version={version}
+            detail={providerDetail}
+            fallback={fallback}
+            onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
+            compact
+          />
+        )}
+      </section>
 
       <section className="mt-6">
         <SectionTitle

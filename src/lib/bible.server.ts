@@ -204,7 +204,7 @@ export async function fetchLicensedChapterFromProvider(
 
 /** Texto de referencias concretas (Inicio, fichas, referencias cruzadas, contexto de IA). */
 export async function fetchLicensedVersesFromProvider(
-  refs: { ref: string; bookId: string; chapter: number; verse?: number }[],
+  refs: { ref: string; bookId: string; chapter: number; verse?: number | undefined }[],
 ): Promise<LicensedVersesResult> {
   const config = readProviderConfig();
   if (!config) return { status: "sin-proveedor" };

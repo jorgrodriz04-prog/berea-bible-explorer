@@ -8,13 +8,9 @@ import { FavoriteButton } from "@/components/berea/favorite-button";
 import { RefChipList } from "@/components/berea/ref-chip";
 import { LicensedVersionNotice, VersionBadge } from "@/components/berea/version-badge";
 import { crossRefsForRef } from "@/lib/knowledge";
-import { useSettings } from "@/lib/settings";
+import { useBibleVersion } from "@/lib/use-bible-version";
 import { fetchLicensedChapter } from "@/lib/bible.functions";
-import {
-  getVersion,
-  publicDomainVersion,
-  PUBLIC_DOMAIN_VERSION_ID,
-} from "@/data/bible/versions";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { loadChapter } from "@/data/bible/text";
 import type { ChapterContent } from "@/data/types";
@@ -43,15 +39,14 @@ export const Route = createFileRoute("/biblia/$bookId/$chapter")({
 
 function ChapterPage() {
   const { book, chapter, content: publicDomainContent } = Route.useLoaderData();
-  const { versionId, setVersionId } = useSettings();
-  const version = getVersion(versionId) ?? publicDomainVersion;
-  const needsProvider = version.delivery === "proveedor-licenciado";
+  const { version, needsProvider, textAvailable, checking, missingMessage, fallback, setVersionId } =
+    useBibleVersion();
 
   const fetchLicensed = useServerFn(fetchLicensedChapter);
   const licensed = useQuery({
     queryKey: ["capitulo-licenciado", version.id, book.id, chapter],
     queryFn: () => fetchLicensed({ data: { bookId: book.id, chapter } }),
-    enabled: needsProvider,
+    enabled: needsProvider && textAvailable,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -64,9 +59,8 @@ function ChapterPage() {
 
   const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
   const providerDetail =
-    result && result.status === "no-disponible"
-      ? result.detail
-      : "Su texto no se incluye en la aplicación. Configura un proveedor con licencia autorizada para leerlo aquí.";
+    result && result.status === "no-disponible" ? result.detail : missingMessage;
+  const loadingLicensed = needsProvider && (checking || licensed.isLoading);
 
   const { prev: prevBook, next: nextBook } = adjacentBooks(book.id);
   const prevHref =
@@ -103,15 +97,15 @@ function ChapterPage() {
         </span>
       </div>
 
-      {needsProvider && licensed.isLoading ? (
-        <p className="text-sm text-muted-foreground">Consultando el proveedor con licencia…</p>
+      {loadingLicensed ? (
+        <p className="text-sm text-muted-foreground">Consultando la fuente autorizada…</p>
       ) : null}
 
-      {needsProvider && !licensed.isLoading && !licensedOk ? (
+      {needsProvider && !loadingLicensed && !licensedOk ? (
         <LicensedVersionNotice
           version={version}
           detail={providerDetail}
-          fallback={publicDomainVersion}
+          fallback={fallback}
           onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
         />
       ) : null}
