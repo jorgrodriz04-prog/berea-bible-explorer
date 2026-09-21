@@ -97,15 +97,15 @@ function ChapterPage() {
         </span>
       </div>
 
-      {needsProvider && licensed.isLoading ? (
-        <p className="text-sm text-muted-foreground">Consultando el proveedor con licencia…</p>
+      {loadingLicensed ? (
+        <p className="text-sm text-muted-foreground">Consultando la fuente autorizada…</p>
       ) : null}
 
-      {needsProvider && !licensed.isLoading && !licensedOk ? (
+      {needsProvider && !loadingLicensed && !licensedOk ? (
         <LicensedVersionNotice
           version={version}
           detail={providerDetail}
-          fallback={publicDomainVersion}
+          fallback={fallback}
           onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
         />
       ) : null}
