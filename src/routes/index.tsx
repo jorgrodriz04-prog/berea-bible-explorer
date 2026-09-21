@@ -111,25 +111,38 @@ function Home() {
         ))}
       </div>
 
-      {verse ? (
-        <section className="mt-6">
-          <SectionTitle
-            action={
-              <AppLink href="/biblia/salmos/23" className="text-xs font-semibold text-primary">
-                Abrir capítulo
-              </AppLink>
-            }
-          >
-            Versículo del día
-          </SectionTitle>
+      <section className="mt-6">
+        <SectionTitle
+          action={
+            <AppLink href="/biblia/salmos/23" className="text-xs font-semibold text-primary">
+              Abrir capítulo
+            </AppLink>
+          }
+        >
+          Versículo del día
+        </SectionTitle>
+        {verseText ? (
           <Panel>
-            <p className="scripture text-card-foreground">{verse.text}</p>
-            <p className="mt-2 text-xs font-semibold text-muted-foreground">
-              Salmos 23:1 · {publicDomainVersion.label} ({publicDomainVersion.license.replace(/\.$/, "")})
+            <p className="scripture text-card-foreground">{verseText}</p>
+            <p className="mt-2">
+              <span className="text-xs font-semibold text-muted-foreground">{DAILY_REF.ref} · </span>
+              <VersionCaption version={version} attribution={attribution} />
             </p>
           </Panel>
-        </section>
-      ) : null}
+        ) : checking || licensed.isLoading ? (
+          <Panel>
+            <p className="text-sm text-muted-foreground">Consultando la fuente autorizada…</p>
+          </Panel>
+        ) : (
+          <LicensedVersionNotice
+            version={version}
+            detail={providerDetail}
+            fallback={fallback}
+            onUseFallback={() => setVersionId(PUBLIC_DOMAIN_VERSION_ID)}
+            compact
+          />
+        )}
+      </section>
 
       <section className="mt-6">
         <SectionTitle
