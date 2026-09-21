@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { BookOpen, GraduationCap, Search, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/berea/app-shell";
 import { AppLink } from "@/components/berea/app-link";
 import { Panel, SectionTitle } from "@/components/berea/section";
+import { LicensedVersionNotice, VersionCaption } from "@/components/berea/version-badge";
+import { useBibleVersion } from "@/lib/use-bible-version";
+import { fetchLicensedVerses } from "@/lib/bible.functions";
 import { studies } from "@/data/studies";
 import { topics } from "@/data/themes";
 import { loadChapter } from "@/data/bible/text";
-import { publicDomainVersion } from "@/data/bible/versions";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 
 export const Route = createFileRoute("/")({
   loader: () => loadChapter("salmos", 23),
