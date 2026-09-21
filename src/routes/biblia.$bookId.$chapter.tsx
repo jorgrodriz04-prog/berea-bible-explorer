@@ -39,15 +39,14 @@ export const Route = createFileRoute("/biblia/$bookId/$chapter")({
 
 function ChapterPage() {
   const { book, chapter, content: publicDomainContent } = Route.useLoaderData();
-  const { versionId, setVersionId } = useSettings();
-  const version = getVersion(versionId) ?? publicDomainVersion;
-  const needsProvider = version.delivery === "proveedor-licenciado";
+  const { version, needsProvider, textAvailable, checking, missingMessage, fallback, setVersionId } =
+    useBibleVersion();
 
   const fetchLicensed = useServerFn(fetchLicensedChapter);
   const licensed = useQuery({
     queryKey: ["capitulo-licenciado", version.id, book.id, chapter],
     queryFn: () => fetchLicensed({ data: { bookId: book.id, chapter } }),
-    enabled: needsProvider,
+    enabled: needsProvider && textAvailable,
     staleTime: 5 * 60 * 1000,
   });
 
