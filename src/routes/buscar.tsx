@@ -1,11 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Search as SearchIcon, X } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/berea/app-shell";
 import { EmptyState } from "@/components/berea/section";
 import { ResultCard } from "@/components/berea/result-card";
 import { Input } from "@/components/ui/input";
 import { AppLink } from "@/components/berea/app-link";
+import { LicensedVersionNotice, VersionCaption } from "@/components/berea/version-badge";
+import { useBibleVersion } from "@/lib/use-bible-version";
+import { searchLicensedVerses } from "@/lib/bible.functions";
+import { getBook } from "@/data/bible/books";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 import { searchVerses } from "@/lib/verseSearch";
 import {
   search,
