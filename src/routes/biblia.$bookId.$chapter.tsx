@@ -8,13 +8,9 @@ import { FavoriteButton } from "@/components/berea/favorite-button";
 import { RefChipList } from "@/components/berea/ref-chip";
 import { LicensedVersionNotice, VersionBadge } from "@/components/berea/version-badge";
 import { crossRefsForRef } from "@/lib/knowledge";
-import { useSettings } from "@/lib/settings";
+import { useBibleVersion } from "@/lib/use-bible-version";
 import { fetchLicensedChapter } from "@/lib/bible.functions";
-import {
-  getVersion,
-  publicDomainVersion,
-  PUBLIC_DOMAIN_VERSION_ID,
-} from "@/data/bible/versions";
+import { PUBLIC_DOMAIN_VERSION_ID } from "@/data/bible/versions";
 import { adjacentBooks, getBook } from "@/data/bible/books";
 import { loadChapter } from "@/data/bible/text";
 import type { ChapterContent } from "@/data/types";
