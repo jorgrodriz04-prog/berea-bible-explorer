@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { PUBLIC_DOMAIN_VERSION_ID, getVersion } from "@/data/bible/versions";
+import { PRIMARY_VERSION_ID, getVersion } from "@/data/bible/versions";
 
 export type ThemeMode = "light" | "dark" | "system";
 
@@ -12,10 +12,11 @@ interface Settings {
 
 const STORAGE_KEY = "berea.settings.v1";
 /**
- * Por defecto se lee la versión de dominio público incluida (RVR1909): es la
- * única cuyo texto BEREA puede mostrar sin una licencia de distribución.
+ * La versión principal y predeterminada de BEREA es Reina-Valera 1960. Su
+ * texto solo se muestra cuando la fuente autorizada está conectada; si no lo
+ * está, BEREA lo dice y nunca sustituye el texto por otra versión.
  */
-const defaults: Settings = { theme: "system", fontScale: 1, versionId: PUBLIC_DOMAIN_VERSION_ID };
+const defaults: Settings = { theme: "system", fontScale: 1, versionId: PRIMARY_VERSION_ID };
 
 interface Ctx extends Settings {
   setTheme: (theme: ThemeMode) => void;
