@@ -59,9 +59,8 @@ function ChapterPage() {
 
   const content = needsProvider ? (licensedOk ? licensedOk.content : null) : publicDomainContent;
   const providerDetail =
-    result && result.status === "no-disponible"
-      ? result.detail
-      : "Su texto no se incluye en la aplicación. Configura un proveedor con licencia autorizada para leerlo aquí.";
+    result && result.status === "no-disponible" ? result.detail : missingMessage;
+  const loadingLicensed = needsProvider && (checking || licensed.isLoading);
 
   const { prev: prevBook, next: nextBook } = adjacentBooks(book.id);
   const prevHref =
