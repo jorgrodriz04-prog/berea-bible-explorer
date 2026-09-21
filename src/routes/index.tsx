@@ -39,10 +39,41 @@ const accesses = [
   { href: "/estudios", label: "Estudios", detail: `${studies.length} disponibles`, icon: GraduationCap },
 ];
 
+const DAILY_REF = { ref: "Salmos 23:1", bookId: "salmos", chapter: 23, verse: 1 };
+
 function Home() {
   const psalm = Route.useLoaderData();
-  const verse = psalm?.verses[0];
   const featured = studies.slice(0, 2);
+  const { version, needsProvider, textAvailable, checking, missingMessage, fallback, setVersionId } =
+    useBibleVersion();
+
+  // El versículo del día siempre se cita en la versión activa: si es RVR1960 se
+  // pide a la fuente autorizada y, sin ella, se informa en vez de sustituirlo.
+  const fetchVerses = useServerFn(fetchLicensedVerses);
+  const licensed = useQuery({
+    queryKey: ["versiculo-dia-licenciado", version.id],
+    queryFn: () => fetchVerses({ data: { refs: [DAILY_REF] } }),
+    enabled: needsProvider && textAvailable,
+    staleTime: 10 * 60 * 1000,
+  });
+  const licensedResult = licensed.data as
+    | { status: "ok"; verses: { ref: string; text: string }[]; attribution: string }
+    | { status: "no-disponible"; detail: string }
+    | { status: "sin-proveedor" }
+    | undefined;
+
+  const licensedText =
+    licensedResult && licensedResult.status === "ok"
+      ? licensedResult.verses.find((v) => v.ref === DAILY_REF.ref)?.text
+      : undefined;
+  const attribution =
+    licensedResult && licensedResult.status === "ok" ? licensedResult.attribution : undefined;
+
+  const verseText = needsProvider ? licensedText : psalm?.verses[0]?.text;
+  const providerDetail =
+    licensedResult && licensedResult.status === "no-disponible"
+      ? licensedResult.detail
+      : missingMessage;
 
   return (
     <AppShell title="BEREA" subtitle="Escudriñando cada día las Escrituras">
